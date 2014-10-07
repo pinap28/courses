@@ -20,9 +20,17 @@ all: html pdf
 zip: $(PDF_FILES)
 	zip all_pdf_files.zip $^
 	
+<<<<<<< HEAD
 %/index.pdf: %/index.html
 	casperjs makepdf.js $< $@ $(DELAY)
 
 %/index.html: %/index.Rmd
 	cd $(dir $<) && Rscript -e "slidify::slidify('index.Rmd')" && cd ..
+=======
+#%/index.pdf: %/index.html
+#	casperjs makepdf.js $< $@ $(DELAY)
+
+#%/index.html: %/index.Rmd
+#	cd $(dir $<) && Rscript -e "slidify::slidify('index.Rmd')" && cd ..
+>>>>>>> origin/gh-pages
 

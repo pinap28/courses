@@ -1,54 +1,191 @@
 <!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
 <html>
 <head>
-  <title>Multiple variables</title>
-  <meta charset="utf-8">
-  <meta name="description" content="Multiple variables">
-  <meta name="author" content="Brian Caffo, Jeff Leek, Roger Peng">
-  <meta name="generator" content="slidify" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <link rel="stylesheet" href="../../librariesNew/frameworks/io2012/css/default.css" media="all" >
-  <link rel="stylesheet" href="../../librariesNew/frameworks/io2012/css/phone.css" 
-    media="only screen and (max-device-width: 480px)" >
-  <link rel="stylesheet" href="../../librariesNew/frameworks/io2012/css/slidify.css" >
-  <link rel="stylesheet" href="../../librariesNew/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
-  
-  <!-- Grab CDN jQuery, fall back to local if offline -->
-  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-  <script>window.jQuery || document.write('<script src="../../librariesNew/widgets/quiz/js/jquery.js"><\/script>')</script> 
-  <script data-main="../../librariesNew/frameworks/io2012/js/slides" 
-    src="../../librariesNew/frameworks/io2012/js/require-1.0.8.min.js">
-  </script>
-  
-  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Multivariable regression</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 
 </head>
-<body style="opacity: 0">
-  <slides class="layout-widescreen">
-    
-    <!-- LOGO SLIDE -->
-        <slide class="title-slide segue nobackground">
-  <aside class="gdbar">
-    <img src="../../assets/img/bloomberg_shield.png">
-  </aside>
-  <hgroup class="auto-fadein">
-    <h1>Multiple variables</h1>
-    <h2>Regression</h2>
-    <p>Brian Caffo, Jeff Leek, Roger Peng<br/>Johns Hopkins Bloomberg School of Public Health</p>
-  </hgroup>
-  <article></article>  
-</slide>
-    
 
-    <!-- SLIDES -->
-    <slide class="" id="slide-1" style="background:;">
-  <hgroup>
-    <h2>Multivariable regression</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
+<body>
+<h2>Multivariable regression</h2>
+
+<ul>
 <li>We have an entire class on prediction and machine learning, so we&#39;ll focus on modeling.
 
 <ul>
@@ -65,16 +202,11 @@
 </ul></li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-2" style="background:;">
-  <hgroup>
-    <h2>The Rumsfeldian triplet</h2>
-  </hgroup>
-  <article data-timings="">
-    <p><em>There are known knowns. These are things we know that we know. There are known unknowns. That is to say, there are things that we know we don&#39;t know. But there are also unknown unknowns. There are things we don&#39;t know we don&#39;t know.</em> Donald Rumsfeld</p>
+<h2>The Rumsfeldian triplet</h2>
+
+<p><em>There are known knowns. These are things we know that we know. There are known unknowns. That is to say, there are things that we know we don&#39;t know. But there are also unknown unknowns. There are things we don&#39;t know we don&#39;t know.</em> Donald Rumsfeld</p>
 
 <p>In our context</p>
 
@@ -84,16 +216,11 @@
 <li>(Unknown Unknowns) Regressors that we don&#39;t even know about that we should have included in the model.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-3" style="background:;">
-  <hgroup>
-    <h2>General rules</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
+<h2>General rules</h2>
+
+<ul>
 <li>Omitting variables results in bias in the coeficients of interest - unless their regressors are uncorrelated with the omitted ones.
 
 <ul>
@@ -105,35 +232,25 @@
 <ul>
 <li>Actually, including any new variables increasese (actual, not estimated) standard errors of other regressors. So we don&#39;t want to idly throw variables into the model.</li>
 </ul></li>
-<li>The model must tend toward perfect fit as the number of non-redundant regressors approaches \(n\).</li>
-<li>\(R^2\) increases monotonically as more regressors are included.</li>
+<li>The model must tend toward perfect fit as the number of non-redundant regressors approaches \( n \).</li>
+<li>\( R^2 \) increases monotonically as more regressors are included.</li>
 <li>The SSE decreases monotonically as more regressors are included.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-4" style="background:;">
-  <hgroup>
-    <h2>Plot of \(R^2\) versus \(n\)</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>For simulations as the number of variables included equals increases to \(n=100\). 
+<h2>Plot of \( R^2 \) versus \( n \)</h2>
+
+<p>For simulations as the number of variables included equals increases to \( n=100 \). 
 No actual regression relationship exist in any simulation</p>
 
-<div class="rimage center"><img src="fig/unnamed-chunk-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" class="plot" /></div>
+<div class="rimage center"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAMAAAD8CC+4AAAAWlBMVEX9/v0AAAAAADkAAGUAOY8AZrU5AAA5ADk5AGU5OTk5ZmU5j9plAABltbVltf2POQCPOTmPZgCP2/21ZgC1ZmW1/rW1/v3ajzna/v39tWX924/9/rX9/tr9/v2USbAoAAAAHnRSTlP//////////////////////////////////////wDsGBxeAAAACXBIWXMAAA9hAAAPYQGoP6dpAAAPVklEQVR4nO3da2PaOAJG4dWkycxs2Wa37JYC4f//zcUXjG/yTZKR9J7zYZqURGP81OAb9j9uJNc/Xj0BtH+gCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpgoAsGumDr0L8+Tdnbr0CTQ3u0Cv1kflRfnM33EBND+7QG/euzoT59+x1gYmif1qBfDz8eX555gU84lnTB1r2n//Gz+uLywXt6wq1be78eqrV3lvOkYztdMNAFAz3ZivfZbb+5Ef3Y3WQzFEOB0W1t/KdH61pnPAj0FHMALwI9/obEoGff8JUc9OwboDuarzzg8lxRtBxwAd1XLdiXot++PucOroHuq5Z058vnf7e39syZ9+kfAN1XT+n7F62vjbv52vf0s/kx+TjovooIfS7QfWVFN6Bnmx3d2Rz0WHvitl7Rqy9Bz7UGvfwDdIkm0J3HBj3Onm/kfXQPgR5nPXRPe2XqQI+zBn1keXcO9Dhr3r1B1wl0wR7o7Y110DOvj+5ra60M9DgbQ/dlDnqk1S/n3VMpQM+rHuhjcw30nOuJjqD72OleB3oc2dDtP+IQ6HG0CN3X/wz0ODJjwP6Yu4EeR6PooQI9jkAXrEbv7HUNFuhxVO1w654uEyzQd2sSshY3Ydfg6kDfrckPnz4Wc9Dzagy9ewzNhN5WqwN9t+bQW1+AnkuL0L0eN7cF+m6BLtjg2KgBPftAF2wxemhz0PcLdMH66KbzuXPrjwUI9N0CXbD+C3fr+zCnwlkDfbdAFwx0wXro7ZMmBn8fNtB3ayH6Dq1DPxnzXt5v1XYJQdDtJYp+er/djua9c1u+bqCP1Dpc2j1tIgX0r8/7An4ub8h3ttyZDfSRWuc8dvexp4Be3mv18ldxIWjbvVZBHylpdJb0bSWNznv6ttJGv4uz9r6+WfSdzdlO36H2h1dGz4AEPb9AFywXdOu9Vn1MU26ZsY8xJIhuC/SRxtA7f4KeX6ALljh6uY1uv/8i6GPVR9dSRT89dsqcDXvkFtdB7++Dix69tfP1xL73xc2i777Ns/ooWxVH2ZaXNjpL+qbm0PffubHuPb08rHrv8sF7+uIq8d4aXDrozR3ULcs56GONobd2zL1gLybb6cEDXaon8BT6/tMFesCeh9f6n0oGPdsWob9gukAP2AL0lwS6twaQBvTsG7w9t46ugZ5pU+g30PNsOfqrTysDfaJ1NsOLR93G0V9+LiHoE63DsVxIaAzd1wRuDPSJgqBHEOgTrZIaHC+rxUFPKyf0x1o66GkF+qIiemYeWoveUe+je542l0C3t249u4feWEfFXQW6PRd0A3qarULv7V19ngoHelI5oD/Pk4nQHPSJ1qM/F3DQE80FfcsQuwW6tXXvx+PocW2fPwLdGugLi/AZbm47emdzPcJZArq1VejPNbcb6AkH+sIifIabA31hET7DzS1GN+2fNP1L+Uc4S0C31V9mB4+1vuue4Qx6sk2jd4+cg55Ja9C7R1pAT7ZV6AsfiyTQbflBjzLQbYG+tOif7+ImT22bRg83UZ4C3dJy9ASUe4FuaQrdgN4uuedvDfRHxRWBLx/GPC4iOCi5528N9LrT26/b5c+f9W35xkru+VsDvaq8IPDxvfgy/zswgl5VoNcXBc7/KtDT6N2jpztNkrdWvbwfv1e33mRJ7+5sT61V6NfDt9/lon62rcmlNwNsTaAXf/ncX5c7enEfj7J32+PpzQBby9CNAvpc6c0AW6AvLr0ZYAv0xaU3Ayx1TnQceUwRPY97rU5M7lL0KD+KPJf0kj7xj3QJeimeoDno1oe6f/YfA/1ZWnNgG3qzdS6Cntm9Vt3RUzg5apj0vVYd0B+7YrNHz+0OjFOvzQvQn1ttqaV8r9Ut6EYNnSX99twwb9DDTV+wlO+1uh69tQcqzfX2KuV7rW5Bb17PddBnS2o+rEbvniSV1HPtJIw+td+8eaB9SMWAPlpKM2IpeutdvPMTKT3XbqDbHmv90NixddCbUpoRC9EfPzay8ZZq2uhW9S762I8mbN6gn+5PrtzfdrIeTFlSSnNiKfpt+kUhwWr08gNLH+83IfTJHWrDxTo/9OqzacVp7aA/H+x8n9Azm61Crw+lFOq66Lavq+8TemaztZf04s93ZXTTfbD/w9nUek8vunzYz4pZUkLzZhV6Xj3W3h/nwnx9iqAPdrgYPXRPpTOvQPdWOvOqj24S//jxmlroX/+2XUlmeenMLNBvxSqc9epBK0pnZoFefO7ccumgdaUzs3ro3X2yEuhnP+SJo1tPgc0tlnTrd/km/p7e/UMOXXPtXR697r8Z75Eb7n4ZQ8/dvH0SRbn/9XrIeTesGaygK6MXF4Y7FkfTje3zqMuKbnZZz2YE/evzvTyofrJf33lZ0c0u63nLE9oi6NfD90L+b/tVARcW3exahT59Nk0+tc+cObq9tBdFN79AH6mDbv1c4uKim1/9q3SDfuuhu764p4De2e8Kui665bBLtqmijy/bxtzyOu91vAf680KfWe2c6S268+gK5rmfLrUBfdfpe015oQ/IFqCbzhu9gnl26Kb/F2301ndqr+idBNBHV87loNuBLhjogm1Bt10j9AZ6GuWN3hMGvWrdBYFnd+HEj97b2y7ZqiX98lFaJ72kg7765b085A564q19Ty8WdtATb/2K3NH8DXrabVh7nzpLGvQUymrnTH83+sQhNdD9FTX66MkyimV1r9Xl6NLmWS/po+fDgQ66ZOmhT994pXOaTO9L0OvSu9eqM3rvxwRL716rE6uLxnaFKNA7pXcHRtCdS+9eqxNk7YdGVulAr0txSQfdsfTutTqx8r0QfeodQqL07rUKunMpbqfb0NuPjO2PBb1OCL29Yg+6x3ZCH1cHfWGZovce7/8O6D4LPy8nzoGwo/ffE0D3WcTo3T10oPtrL/RRddAXlif64NEBeqjJSyJNdPFyQ7es3KtvpHVLFX1MvfEePgZ6O9AFA12wjNCf63Cj6KEnLKESRh9ZQ7+BvqRk0YeOoC8tNfTODvSxh2zogacrqRJGr/a49P8R2A+306O00TufmQR9aSmjl8t56z2++QP06ZJG7/wN6IvLER3zmdJH7x2CAX0+0AXLAL17NBX0+UAXLAf07ho7B9RmA12wxNDHPUFfVxbot+7eWNBnAl2w2NF7gKD7KH500/129scwny1ydNvVXkd+buRLGi9u9ME1hu3o7d/xOxH5FTv64Aj6gt8Bfaao0Tv7V59/M/dLoM8UM7oBPUxxoz//2/mrmd8CfaZ16Kf7HC0vFXra4zKh3QPlg6+tvwX6TOuuGHmnvny8316GvsQT9NnWXRu2WMqvh2+/QU+6DVeBLtSjRvc5DVm2fkkv/nzfE31wajs5tvo9vejyscuttNvowxV52ty6tffHbTy+PvdFr3bHYu6p+LfTG3TW0HyVAvrjO8w9lQ46eSvme62CHiiWdMEiRsc8VKALFvG9VkEPVcT3WgU9VPHdgZE97cGL716rZnCchTwX45IOeuDiu9cq6MGL716roAcvuu305yFU0EMFumCgCwa6YK9GH8iCHr7Xo49camL4GTbyGeiCgS5YBOjDS02AHrYXow/OZgd9hyJDb624gx6s16OPff4c9KDFiT582SePgS7Ya9H7V5VpnyoFerAiRR9sypHHokLvXHMC9GDFgD685MSND6mGLCb03hY76KF6KXpvCR/bTUMBigKd/a77Brpg+6MP7nh+Y7frzr0EfeyqgKy47deL0Hs7Zdgs37VXoNcv8WyVv6rd0Z8LOeiv6kXovJ6/MtAFexU6W2gvbG90rCMIdMFAFwx0wXZGxzyGQBcMdMH2RGeHTCTtiM7h01ja7yrQiEfTfleBxjyadrs2LObxtNdVoHlxj6g9lnRupBdZ4a8Czc0Toyv4VaABj6/A2+mQx1hQdF7X4yw0ut/hyUsx32uVAuV5SacUAl0w0AXzfJSNUsjzUTZKIc/73imFPB9loxRiSRfM81E2SiHPR9kohdhOFywcuqHwbaMJiJ7jMJFNDuh7DBPZ5IC+xzCRTQ7oewwT2eSAvscwkU0O6HsME9nkgL7HMJFNDuh7DBPZ5IC+xzCRTU506BRtoAsGumCgCwa6YKALBrpgoAsGumCgCwa6YKALBrpggdDPxph3tyFOjyGcxzqWn81wHObsZ3J8DHP565fbUGHQz+bH7XpwkjqZ7/dh3j2MdS4/kOM4zPk+xuXDeXKa33YY5nooPz3qMFQQ9K/PYhLOj0++bal6Fqe3X85jXQ8FuuMw18N3H5Pz9Vn8+zv98dNhmHN1TYhmhA1DBUGvPt/o9CnHy0fxsej77HEe6/TtP+VS6jTMufvRza3jNOjbh7n/zqlAb0bYMFQg9EKsWjqcOr79ch3r8ufPY4nuNMzp7X+H8o3TcZzqpfjbb6dhavR6hA1DBUE/m2o6HFfl6vd1p7GKz9QX6I7DnMx9US9eSF2f2uXDFJducRqmRG9G2DBUzOjNepyL1h3cC3qxIN1f5B3HOZb/dt5+ZYju5+W9mtFuY91f3KtNNteX9/I9/T5/HSenfOfd9prcmpgoX94f6xY/Zn9yomN1BSu3sU7VJ3qfa04bJ+n8RHcZp1oq728TTsN0VuS2TFGsm2zN5cs8jHV032Sr5uzZdZOtWdKdhjlFucnmYefMcxPEfayjh50zxYwuL7TkNs7jPd1pmFOUO2c87DptXpdj2g37/fHF9nGK5+U6ORV6dLthKepAFwx0wUAXDHTBQBcMdMFAFwx0wUAXDHTBQBcMdMFAFwx0wUAXDHTBQBcMdMFAFwx0wUAXDHTBQBcMdMFAFwx0wUAXDHTBQBcM9Lrr4V+H+sPI2Qd63fVgfrhd+i6dQK9rLlH56gnZIdDrrofiGjdu18lJJdDranTjdEWsRAK9jiVdsOY6z6+ekB0Cve56uC/kZ41tNtDrrod/fhiJd3TQmzxcqDyZQK8DXTDQKetAFwx0wUAXDHTBQBcMdMFAFwx0wUAXDHTBQBcMdMFAFwx0wUAXDHTBQBcMdMFAFwx0wf4Pvx5J+VZf5C0AAAAASUVORK5CYII=" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" class="plot" /></div>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-5" style="background:;">
-  <hgroup>
-    <h2>Variance inflation</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">n &lt;- 100; nosim &lt;- 1000
+<h2>Variance inflation</h2>
+
+<pre><code class="r">n &lt;- 100; nosim &lt;- 1000
 x1 &lt;- rnorm(n); x2 &lt;- rnorm(n); x3 &lt;- rnorm(n); 
 betas &lt;- sapply(1 : nosim, function(i){
   y &lt;- x1 + rnorm(n, sd = .3)
@@ -148,16 +265,11 @@ round(apply(betas, 1, sd), 5)
 0.02839 0.02872 0.02884 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-6" style="background:;">
-  <hgroup>
-    <h2>Variance inflation</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">n &lt;- 100; nosim &lt;- 1000
+<h2>Variance inflation</h2>
+
+<pre><code class="r">n &lt;- 100; nosim &lt;- 1000
 x1 &lt;- rnorm(n); x2 &lt;- x1/sqrt(2) + rnorm(n) /sqrt(2)
 x3 &lt;- x1 * 0.95 + rnorm(n) * sqrt(1 - 0.95^2); 
 betas &lt;- sapply(1 : nosim, function(i){
@@ -173,39 +285,29 @@ round(apply(betas, 1, sd), 5)
 0.03131 0.04270 0.09653 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-7" style="background:;">
-  <hgroup>
-    <h2>Variance inflation factors</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
+<h2>Variance inflation factors</h2>
+
+<ul>
 <li>Notice variance inflation was much worse when we included a variable that
 was highly related to <code>x1</code>. </li>
-<li>We don&#39;t know \(\sigma\), so we can only estimate the increase in the actual standard error of the coefficients for including a regressor.</li>
-<li>However, \(\sigma\) drops out of the relative standard errors. If one sequentially adds variables, one can check the variance (or sd) inflation for including each one.</li>
+<li>We don&#39;t know \( \sigma \), so we can only estimate the increase in the actual standard error of the coefficients for including a regressor.</li>
+<li>However, \( \sigma \) drops out of the relative standard errors. If one sequentially adds variables, one can check the variance (or sd) inflation for including each one.</li>
 <li>When the other regressors are actually orthogonal to the regressor of interest, then there is no variance inflation.</li>
 <li>The variance inflation factor (VIF) is the increase in the variance for the ith regressor compared to the ideal setting where it is orthogonal to the other regressors.
 
 <ul>
-<li>(The square root of the VIF is the increase in the sd ...)</li>
+<li>(The square root of the VIF is the increase in the sd &hellip;)</li>
 </ul></li>
 <li>Remember, variance inflation is only part of the picture. We want to include certain variables, even if they dramatically inflate our variance. </li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-8" style="background:;">
-  <hgroup>
-    <h2>Revisting our previous simulation</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">##doesn&#39;t depend on which y you use,
+<h2>Revisting our previous simulation</h2>
+
+<pre><code class="r">##doesn&#39;t depend on which y you use,
 y &lt;- x1 + rnorm(n, sd = .3)
 a &lt;- summary(lm(y ~ x1))$cov.unscaled[2,2]
 c(summary(lm(y ~ x1 + x2))$cov.unscaled[2,2],
@@ -222,16 +324,11 @@ c(summary(lm(y ~ x1 + x2))$cov.unscaled[2,2],
 1.860 9.506 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-9" style="background:;">
-  <hgroup>
-    <h2>Swiss data</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">data(swiss); 
+<h2>Swiss data</h2>
+
+<pre><code class="r">data(swiss); 
 fit1 &lt;- lm(Fertility ~ Agriculture, data = swiss)
 a &lt;- summary(fit1)$cov.unscaled[2,2]
 fit2 &lt;- update(fit, Fertility ~ Agriculture + Examination)
@@ -243,16 +340,11 @@ fit3 &lt;- update(fit, Fertility ~ Agriculture + Examination + Education)
 <pre><code>[1] 1.892 2.089
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-10" style="background:;">
-  <hgroup>
-    <h2>Swiss data VIFs,</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">library(car)
+<h2>Swiss data VIFs,</h2>
+
+<pre><code class="r">library(car)
 fit &lt;- lm(Fertility ~ . , data = swiss)
 vif(fit)
 </code></pre>
@@ -268,16 +360,11 @@ vif(fit)
            1.511            1.917            1.666            1.392            1.052 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-11" style="background:;">
-  <hgroup>
-    <h2>What about residual variance estimation?</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
+<h2>What about residual variance estimation?</h2>
+
+<ul>
 <li>Assuming that the model is linear with additive iid errors (with finite variance), we can mathematically describe the impact of omitting necessary variables or including unnecessary ones.
 
 <ul>
@@ -287,16 +374,11 @@ vif(fit)
 </ul></li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-12" style="background:;">
-  <hgroup>
-    <h2>Covariate model selection</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
+<h2>Covariate model selection</h2>
+
+<ul>
 <li>Automated covariate selection is a difficult topic. It depends heavily on how rich of a covariate space one wants to explore. 
 
 <ul>
@@ -309,16 +391,11 @@ vif(fit)
 <li>My favoriate approach is as follows. Given a coefficient that I&#39;m interested in, I like to use covariate adjustment and multiple models to probe that effect to evaluate it for robustness and to see what other covariates knock it out.  This isn&#39;t a terribly systematic approach, but it tends to teach you a lot about the the data as you get your hands dirty.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-<slide class="" id="slide-13" style="background:;">
-  <hgroup>
-    <h2>How to do nested model testing in R</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">fit1 &lt;- lm(Fertility ~ Agriculture, data = swiss)
+<h2>How to do nested model testing in R</h2>
+
+<pre><code class="r">fit1 &lt;- lm(Fertility ~ Agriculture, data = swiss)
 fit3 &lt;- update(fit, Fertility ~ Agriculture + Examination + Education)
 fit5 &lt;- update(fit, Fertility ~ Agriculture + Examination + Education + Catholic + Infant.Mortality)
 anova(fit1, fit3, fit5)
@@ -338,119 +415,7 @@ Model 3: Fertility ~ Agriculture + Examination + Education + Catholic +
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-    <slide class="backdrop"></slide>
-  </slides>
-  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
-    <ul>
-      <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Multivariable regression'>
-         1
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='The Rumsfeldian triplet'>
-         2
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='General rules'>
-         3
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Plot of \(R^2\) versus \(n\)'>
-         4
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Variance inflation'>
-         5
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Variance inflation'>
-         6
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Variance inflation factors'>
-         7
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Revisting our previous simulation'>
-         8
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Swiss data'>
-         9
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Swiss data VIFs,'>
-         10
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='What about residual variance estimation?'>
-         11
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Covariate model selection'>
-         12
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='How to do nested model testing in R'>
-         13
-      </a>
-    </li>
-  </ul>
-  </div>  <!--[if IE]>
-    <script 
-      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
-    </script>
-    <script>CFInstall.check({mode: 'overlay'});</script>
-  <![endif]-->
 </body>
-  <!-- Load Javascripts for Widgets -->
-  
-  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-      }
-    });
-  </script>
-  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  </script> -->
-  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="../../librariesNew/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
-</script>
-<!-- LOAD HIGHLIGHTER JS FILES -->
-  <script src="../../librariesNew/highlighters/highlight.js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
-   
-  </html>
+
+</html>
+

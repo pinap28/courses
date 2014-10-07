@@ -1,59 +1,191 @@
 <!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
 <html>
 <head>
-  <title>Multivariable regression</title>
-  <meta charset="utf-8">
-  <meta name="description" content="Multivariable regression">
-  <meta name="author" content="Brian Caffo, Roger Peng and Jeff Leek">
-  <meta name="generator" content="slidify" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/css/default.css" media="all" >
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/phone.css" 
-    media="only screen and (max-device-width: 480px)" >
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/css/slidify.css" >
-  <link rel="stylesheet" href="../../libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
-  <script data-main="../../libraries/frameworks/io2012/js/slides" 
-    src="../../libraries/frameworks/io2012/js/require-1.0.8.min.js">
-  </script>
-  
-    <link rel="stylesheet" href = "../../assets/css/custom.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.BACKUP.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.BASE.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.LOCAL.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.orig">
-<link rel="stylesheet" href = "../../assets/css/custom.css.REMOTE.546.css">
-<link rel="stylesheet" href = "../../assets/css/ribbons.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Multivariable regression analyses</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 
 </head>
-<body style="opacity: 0">
-  <slides class="layout-widescreen">
-    
-    <!-- LOGO SLIDE -->
-    <!-- END LOGO SLIDE -->
-    
 
-    <!-- TITLE SLIDE -->
-    <!-- Should I move this to a Local Layout File? -->
-    <slide class="title-slide segue nobackground">
-      <aside class="gdbar">
-        <img src="../../assets/img/bloomberg_shield.png">
-      </aside>
-      <hgroup class="auto-fadein">
-        <h1>Multivariable regression</h1>
-        <h2></h2>
-        <p>Brian Caffo, Roger Peng and Jeff Leek<br/>Johns Hopkins Bloomberg School of Public Health</p>
-      </hgroup>
-          </slide>
+<body>
+<h2>Multivariable regression analyses</h2>
 
-    <!-- SLIDES -->
-      <slide class="" id="slide-1" style="background:;">
-  <hgroup>
-    <h2>Multivariable regression analyses</h2>
-  </hgroup>
-  <article>
-    <ul>
+<ul>
 <li>If I were to present evidence of a relationship between 
 breath mint useage (mints per day, X) and pulmonary function
 (measured in FEV), you would be skeptical.
@@ -65,16 +197,11 @@ breath mint useage (mints per day, X) and pulmonary function
 <li>In other words, to even consider my results, I would have to demonstrate that they hold while holding smoking status fixed.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-2" style="background:;">
-  <hgroup>
-    <h2>Multivariable regression analyses</h2>
-  </hgroup>
-  <article>
-    <ul>
+<h2>Multivariable regression analyses</h2>
+
+<ul>
 <li>An insurance company is interested in how last year&#39;s claims can predict a person&#39;s time in the hospital this year. 
 
 <ul>
@@ -90,263 +217,204 @@ the purpose of prediction?</li>
 </ul></li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-3" style="background:;">
-  <hgroup>
-    <h2>The linear model</h2>
-  </hgroup>
-  <article>
-    <ul>
+<h2>The linear model</h2>
+
+<ul>
 <li>The general linear model extends simple linear regression (SLR)
 by adding terms linearly into the model.
-\[
+\[ 
 Y_i =  \beta_1 X_{1i} + \beta_2 X_{2i} + \ldots +
 \beta_{p} X_{pi} + \epsilon_{i} 
 = \sum_{k=1}^p X_{ik} \beta_j + \epsilon_{i}
-\]</li>
-<li>Here \(X_{1i}=1\) typically, so that an intercept is included.</li>
+ \]</li>
+<li>Here \( X_{1i}=1 \) typically, so that an intercept is included.</li>
 <li>Least squares (and hence ML estimates under iid Gaussianity 
 of the errors) minimizes
-\[
+\[ 
 \sum_{i=1}^n \left(Y_i - \sum_{k=1}^p X_{ki} \beta_j\right)^2
-\]</li>
+ \]</li>
 <li>Note, the important linearity is linearity in the coefficients.
 Thus
-\[
+\[ 
 Y_i =  \beta_1 X_{1i}^2 + \beta_2 X_{2i}^2 + \ldots +
 \beta_{p} X_{pi}^2 + \epsilon_{i} 
-\]
+ \]
 is still a linear model. (We&#39;ve just squared the elements of the
 predictor variables.)</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-4" style="background:;">
-  <hgroup>
-    <h2>How to get estimates</h2>
-  </hgroup>
-  <article>
-    <ul>
+<h2>How to get estimates</h2>
+
+<ul>
 <li>The real way requires linear algebra. We&#39;ll go over an intuitive development instead. </li>
-<li>Recall that the LS estimate for regression through the origin, \(E[Y_i]=X_{1i}\beta_1\), was \(\sum X_i Y_i / \sum X_i^2\).</li>
-<li>Let&#39;s consider two regressors, \(E[Y_i] = X_{1i}\beta_1 + X_{2i}\beta_2 = \mu_i\). </li>
-<li>Also, recall, that if \(\hat \mu_i\) satisfies
-\[
+<li>Recall that the LS estimate for regression through the origin, \( E[Y_i]=X_{1i}\beta_1 \), was \( \sum X_i Y_i / \sum X_i^2 \).</li>
+<li>Let&#39;s consider two regressors, \( E[Y_i] = X_{1i}\beta_1 + X_{2i}\beta_2 = \mu_i \). </li>
+<li>Also, recall, that if \( \hat \mu_i \) satisfies
+\[ 
 \sum_{i=1} (Y_i - \hat \mu_i) (\hat \mu_i - \mu_i) = 0
-\]
-for all possible values of \(\mu_i\), then we&#39;ve found the LS estimates.</li>
+ \]
+for all possible values of \( \mu_i \), then we&#39;ve found the LS estimates.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-5" style="background:;">
-  <hgroup>
-    
-  </hgroup>
-  <article>
-    <p>\[
+<p>\[ 
 \sum_{i=1}^n (Y_i - \hat \mu_i) (\hat \mu_i - \mu_i) = \sum_{i=1}^n (Y_i - \hat \beta_1 X_{1i} - \hat \beta_2 X_{2i})
 \left\{X_{1i}(\hat \beta_1 - \beta_1) + X_{2i}(\hat \beta_2 - \beta_2) \right\}
-\]</p>
+ \]</p>
 
 <ul>
 <li>Thus we need 
 
 <ol>
-<li>\(\sum_{i=1}^n (Y_i - \hat \beta_1 X_{1i} - \hat \beta_2 X_{2i}) X_{1i} = 0\) </li>
-<li> \(\sum_{i=1}^n (Y_i - \hat \beta_1 X_{1i} - \hat \beta_2 X_{2i}) X_{2i} = 0\)</li>
+<li>\( \sum_{i=1}^n (Y_i - \hat \beta_1 X_{1i} - \hat \beta_2 X_{2i}) X_{1i} = 0 \) </li>
+<li> \( \sum_{i=1}^n (Y_i - \hat \beta_1 X_{1i} - \hat \beta_2 X_{2i}) X_{2i} = 0 \)</li>
 </ol></li>
-<li>Hold \(\hat \beta_1\) fixed in 2. and solve and we get that
-\[
+<li>Hold \( \hat \beta_1 \) fixed in 2. and solve and we get that
+\[ 
 \hat \beta_2 = \frac{\sum_{i=1} (Y_i - X_{1i}\hat \beta_1)X_{2i}}{\sum_{i=1}^n X_{2i}^2}
-\]</li>
+ \]</li>
 <li>Plugging this into 1. we get that
-\[
+\[ 
 0 = \sum_{i=1}^n \left\{Y_i - \frac{\sum_j X_{2j}Y_j}{\sum_j X_{2j}^2}X_{2i} + 
 \beta_1 \left(X_{1i} - \frac{\sum_j X_{2j}X_{1j}}{\sum_j X_{2j}^2} X_{2i}\right)\right\} X_{1i}
-\]</li>
+ \]</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-6" style="background:;">
-  <hgroup>
-    <h2>Continued</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>Re writing  this we get
-\[
-0 = \sum_{i=1}^n \left\{ e_{i, Y | X_2} - \hat \beta_1 e_{i, X_1 | X_2} 
-\right\} X_{1i} 
-\]
-where \(e_{i, a | b} = a_i -  \frac{\sum_{j=1}^n a_j b_j }{\sum_{i=1}^n b_j^2} b_i\) is the residual when regressing \(b\) from \(a\) without an intercept.</li>
-<li>We get the solution
-\[
-\hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2} X_1}
-\]</li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-      <slide class="" id="slide-7" style="background:;">
-  <hgroup>
-    
-  </hgroup>
-  <article>
-    <ul>
-<li>But note that 
-\[
-\sum_{i=1}^n e_{i, X_1 | X_2}^2 
-= \sum_{i=1}^n e_{i, X_1 | X_2} \left(X_{1i} - \frac{\sum_j X_{2j}X_{1j}}{\sum_j X_{2j}^2} X_{2i}\right)
-\]
-\[
-= \sum_{i=1}^n e_{i, X_1 | X_2} X_{1i} - \frac{\sum_j X_{2j}X_{1j}}{\sum_j X_{2j}^2} \sum_{i=1}^n e_{i, X_1 | X_2} X_{2i}
-\]
-But \(\sum_{i=1}^n e_{i, X_1 | X_2} X_{2i} = 0\). So we get that
-\[
-\sum_{i=1}^n e_{i, X_1 | X_2}^2  = \sum_{i=1}^n e_{i, X_1 | X_2} X_{1i}
-\]
-Thus we get that
-\[
-\hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2}^2}
-\]</li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-      <slide class="" id="slide-8" style="background:;">
-  <hgroup>
-    <h2>Summing up fitting with two regressors</h2>
-  </hgroup>
-  <article>
-    <p>\[\hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2}^2}\]</p>
+<h2>Continued</h2>
 
 <ul>
-<li>That is, the regression estimate for \(\beta_1\) is the regression 
-through the origin estimate having regressed \(X_2\) out of both
+<li>Re writing  this we get
+\[ 
+0 = \sum_{i=1}^n \left\{ e_{i, Y | X_2} - \hat \beta_1 e_{i, X_1 | X_2} 
+\right\} X_{1i} 
+ \]
+where \( e_{i, a | b} = a_i -  \frac{\sum_{j=1}^n a_j b_j }{\sum_{i=1}^n b_j^2} b_i \) is the residual when regressing \( b \) from \( a \) without an intercept.</li>
+<li>We get the solution
+\[ 
+\hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2} X_1}
+ \]</li>
+</ul>
+
+<hr/>
+
+<ul>
+<li>But note that 
+\[ 
+\sum_{i=1}^n e_{i, X_1 | X_2}^2 
+= \sum_{i=1}^n e_{i, X_1 | X_2} \left(X_{1i} - \frac{\sum_j X_{2j}X_{1j}}{\sum_j X_{2j}^2} X_{2i}\right)
+ \]
+\[ 
+= \sum_{i=1}^n e_{i, X_1 | X_2} X_{1i} - \frac{\sum_j X_{2j}X_{1j}}{\sum_j X_{2j}^2} \sum_{i=1}^n e_{i, X_1 | X_2} X_{2i}
+ \]
+But \( \sum_{i=1}^n e_{i, X_1 | X_2} X_{2i} = 0 \). So we get that
+\[ 
+\sum_{i=1}^n e_{i, X_1 | X_2}^2  = \sum_{i=1}^n e_{i, X_1 | X_2} X_{1i}
+ \]
+Thus we get that
+\[ 
+\hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2}^2}
+ \]</li>
+</ul>
+
+<hr/>
+
+<h2>Summing up fitting with two regressors</h2>
+
+<p>\[ \hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2}^2} \]</p>
+
+<ul>
+<li>That is, the regression estimate for \( \beta_1 \) is the regression 
+through the origin estimate having regressed \( X_2 \) out of both
 the response and the predictor.</li>
-<li>(Similarly, the regression estimate for \(\beta_2\) is the regression  through the origin estimate having regressed \(X_1\) out of both the response and the predictor.)</li>
+<li>(Similarly, the regression estimate for \( \beta_2 \) is the regression  through the origin estimate having regressed \( X_1 \) out of both the response and the predictor.)</li>
 <li>More generally, multivariate regression estimates are exactly those having removed the linear relationship of the other variables
 from both the regressor and response.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-9" style="background:;">
-  <hgroup>
-    <h2>Example with two variables, simple linear regression</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>\(Y_{i} = \beta_1 X_{1i} + \beta_2 X_{2i}\) where  \(X_{2i} = 1\) is an intercept term.</li>
-<li>Then  \(\frac{\sum_j X_{2j}X_{1j}}{\sum_j X_{2j}^2}X_{2i} = 
-\frac{\sum_j X_{1j}}{n} = \bar X_1\). </li>
-<li>\(e_{i, X_1 | X_2} = X_{1i} - \bar X_1\).</li>
-<li>Simiarly \(e_{i, Y | X_2} = Y_i - \bar Y\).</li>
-<li>Thus
-\[
-\hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2}^2} = \frac{\sum_{i=1}^n (X_i - \bar X)(Y_i - \bar Y)}{\sum_{i=1}^n (X_i - \bar X)^2}
-= Cor(X, Y) \frac{Sd(Y)}{Sd(X)}
-\]</li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-      <slide class="" id="slide-10" style="background:;">
-  <hgroup>
-    <h2>The general case</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>The equations
-\[
-\sum_{i=1}^n (Y_i - X_{1i}\hat \beta_1 - \ldots - X_{ip}\hat \beta_p) X_k = 0
-\]
-for \(k = 1, \ldots, p\) yields \(p\) equations with \(p\) unknowns.</li>
-<li>Solving them yields the least squares estimates. (With obtaining a good, fast, general solution requiring some knowledge of linear algebra.)</li>
-<li>The least squares estimate for the coefficient of a multivariate regression model is exactly regression through the origin with the linear relationships with the other regressors removed from both the regressor and outcome by taking residuals. </li>
-<li>In this sense, multivariate regression &quot;adjusts&quot; a coefficient for the linear impact of the other variables. </li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-      <slide class="" id="slide-11" style="background:;">
-  <hgroup>
-    <h2>Fitting LS equations</h2>
-  </hgroup>
-  <article>
-    <p>Just so I don&#39;t leave you hanging, let&#39;s show a way to get estimates. Recall the equations:
-\[
-\sum_{i=1}^n (Y_i - X_{1i}\hat \beta_1 - \ldots - X_{ip}\hat \beta_p) X_k = 0
-\]
-If I hold \(\hat \beta_1, \ldots, \hat \beta_{p-1}\) fixed then
-we get that
-\[
-\hat \beta_p = \frac{\sum_{i=1}^n (Y_i - X_{1i}\hat \beta_1 - \ldots - X_{i,p-1}\hat \beta_{p-1}) X_{ip} }{\sum_{i=1}^n X_{ip}^2}
-\]
-Plugging this back into the equations, we wind up with 
-\[
-\sum_{i=1}^n (e_{i,Y|X_p} - e_{i, X_{1} | X_p} \hat \beta_1 - \ldots - e_{i, X_{p-1} | X_{p}} \hat \beta_{p-1}) X_k = 0
-\]</p>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-      <slide class="" id="slide-12" style="background:;">
-  <hgroup>
-    <h2>We can tidy it up a bit more, though</h2>
-  </hgroup>
-  <article>
-    <p>Note that
-\[
-X_k  = e_{i,X_k|X_p} + \frac{\sum_{i=1}^n X_{ik} X_{ip}}{\sum_{i=1}^n X_{ip^2}} X_p
-\]
-and \(\sum_{i=1}^n e_{i,X_j | X_p} X_{ip} = 0\).
-Thus 
-\[
-\sum_{i=1}^n (e_{i,Y|X_p} - e_{i, X_{1} | X_p} \hat \beta_1 - \ldots - e_{i, X_{p-1} | X_{p}} \hat \beta_{p-1}) X_k = 0
-\]
-is equal to
-\[
-\sum_{i=1}^n (e_{i,Y|X_p} - e_{i, X_{1} | X_p} \hat \beta_1 - \ldots - e_{i, X_{p-1} | X_{p}} \hat \beta_{p-1}) e_{i,X_k|X_p} = 0
-\]</p>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-      <slide class="" id="slide-13" style="background:;">
-  <hgroup>
-    <h2>To sum up</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>We&#39;ve reduced \(p\) LS equations and \(p\) unknowns to \(p-1\) LS equations and \(p-1\) unknowns.
+<h2>Example with two variables, simple linear regression</h2>
 
 <ul>
-<li>Every variable has been replaced by its residual with \(X_p\). </li>
+<li>\( Y_{i} = \beta_1 X_{1i} + \beta_2 X_{2i} \) where  \( X_{2i} = 1 \) is an intercept term.</li>
+<li>Then  \( \frac{\sum_j X_{2j}X_{1j}}{\sum_j X_{2j}^2}X_{2i} = 
+\frac{\sum_j X_{1j}}{n} = \bar X_1 \). </li>
+<li>\( e_{i, X_1 | X_2} = X_{1i} - \bar X_1 \).</li>
+<li>Simiarly \( e_{i, Y | X_2} = Y_i - \bar Y \).</li>
+<li>Thus
+\[ 
+\hat \beta_1 = \frac{\sum_{i=1}^n e_{i, Y | X_2} e_{i, X_1 | X_2}}{\sum_{i=1}^n e_{i, X_1 | X_2}^2} = \frac{\sum_{i=1}^n (X_i - \bar X)(Y_i - \bar Y)}{\sum_{i=1}^n (X_i - \bar X)^2}
+= Cor(X, Y) \frac{Sd(Y)}{Sd(X)}
+ \]</li>
+</ul>
+
+<hr/>
+
+<h2>The general case</h2>
+
+<ul>
+<li>The equations
+\[ 
+\sum_{i=1}^n (Y_i - X_{1i}\hat \beta_1 - \ldots - X_{ip}\hat \beta_p) X_k = 0
+ \]
+for \( k = 1, \ldots, p \) yields \( p \) equations with \( p \) unknowns.</li>
+<li>Solving them yields the least squares estimates. (With obtaining a good, fast, general solution requiring some knowledge of linear algebra.)</li>
+<li>The least squares estimate for the coefficient of a multivariate regression model is exactly regression through the origin with the linear relationships with the other regressors removed from both the regressor and outcome by taking residuals. </li>
+<li>In this sense, multivariate regression &ldquo;adjusts&rdquo; a coefficient for the linear impact of the other variables. </li>
+</ul>
+
+<hr/>
+
+<h2>Fitting LS equations</h2>
+
+<p>Just so I don&#39;t leave you hanging, let&#39;s show a way to get estimates. Recall the equations:
+\[ 
+\sum_{i=1}^n (Y_i - X_{1i}\hat \beta_1 - \ldots - X_{ip}\hat \beta_p) X_k = 0
+ \]
+If I hold \( \hat \beta_1, \ldots, \hat \beta_{p-1} \) fixed then
+we get that
+\[ 
+\hat \beta_p = \frac{\sum_{i=1}^n (Y_i - X_{1i}\hat \beta_1 - \ldots - X_{i,p-1}\hat \beta_{p-1}) X_{ip} }{\sum_{i=1}^n X_{ip}^2}
+ \]
+Plugging this back into the equations, we wind up with 
+\[ 
+\sum_{i=1}^n (e_{i,Y|X_p} - e_{i, X_{1} | X_p} \hat \beta_1 - \ldots - e_{i, X_{p-1} | X_{p}} \hat \beta_{p-1}) X_k = 0
+ \]</p>
+
+<hr/>
+
+<h2>We can tidy it up a bit more, though</h2>
+
+<p>Note that
+\[ 
+X_k  = e_{i,X_k|X_p} + \frac{\sum_{i=1}^n X_{ik} X_{ip}}{\sum_{i=1}^n X_{ip^2}} X_p
+ \]
+and \( \sum_{i=1}^n e_{i,X_j | X_p} X_{ip} = 0 \).
+Thus 
+\[ 
+\sum_{i=1}^n (e_{i,Y|X_p} - e_{i, X_{1} | X_p} \hat \beta_1 - \ldots - e_{i, X_{p-1} | X_{p}} \hat \beta_{p-1}) X_k = 0
+ \]
+is equal to
+\[ 
+\sum_{i=1}^n (e_{i,Y|X_p} - e_{i, X_{1} | X_p} \hat \beta_1 - \ldots - e_{i, X_{p-1} | X_{p}} \hat \beta_{p-1}) e_{i,X_k|X_p} = 0
+ \]</p>
+
+<hr/>
+
+<h2>To sum up</h2>
+
+<ul>
+<li>We&#39;ve reduced \( p \) LS equations and \( p \) unknowns to \( p-1 \) LS equations and \( p-1 \) unknowns.
+
+<ul>
+<li>Every variable has been replaced by its residual with \( X_p \). </li>
 <li>This process can then be iterated until only Y and one
 variable remains. </li>
 </ul></li>
@@ -354,22 +422,17 @@ variable remains. </li>
 
 <ul>
 <li>The order that you do the confounders doesn&#39;t matter.</li>
-<li>(It can&#39;t because our choice of doing \(p\) first 
+<li>(It can&#39;t because our choice of doing \( p \) first 
 was arbitrary.)</li>
 </ul></li>
 <li>This isn&#39;t a terribly efficient way to get estimates. But, it&#39;s nice conceputally, as it shows how regression estimates are adjusted for the linear relationship with other variables.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-14" style="background:;">
-  <hgroup>
-    <h2>Demonstration that it works using an example</h2>
-  </hgroup>
-  <article>
-    <h3>Linear model with two variables and an intercept</h3>
+<h2>Demonstration that it works using an example</h2>
+
+<h3>Linear model with two variables and an intercept</h3>
 
 <pre><code class="r">n &lt;- 100; x &lt;- rnorm(n); x2 &lt;- rnorm(n); x3 &lt;- rnorm(n)
 y &lt;- x + x2 + x3 + rnorm(n, sd = .1)
@@ -389,16 +452,11 @@ sum(ey * ex) / sum(ex ^ 2)
 1.0040 0.9899 1.0078 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-15" style="background:;">
-  <hgroup>
-    <h2>Showing that order doesn&#39;t matter</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">ey &lt;- e(e(y, x3), e(x2, x3))
+<h2>Showing that order doesn&#39;t matter</h2>
+
+<pre><code class="r">ey &lt;- e(e(y, x3), e(x2, x3))
 ex &lt;- e(e(x, x3), e(x2, x3))
 sum(ey * ex) / sum(ex ^ 2)
 </code></pre>
@@ -413,16 +471,11 @@ sum(ey * ex) / sum(ex ^ 2)
 1.0040 0.9899 1.0078 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-16" style="background:;">
-  <hgroup>
-    <h2>Residuals again</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">ey &lt;- resid(lm(y ~ x2 + x3 - 1))
+<h2>Residuals again</h2>
+
+<pre><code class="r">ey &lt;- resid(lm(y ~ x2 + x3 - 1))
 ex &lt;- resid(lm(x ~ x2 + x3 - 1))
 sum(ey * ex) / sum(ex ^ 2)
 </code></pre>
@@ -437,58 +490,43 @@ sum(ey * ex) / sum(ex ^ 2)
 1.0040 0.9899 1.0078 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-17" style="background:;">
-  <hgroup>
-    <h2>Interpretation of the coeficient</h2>
-  </hgroup>
-  <article>
-    <p>\[E[Y | X_1 = x_1, \ldots, X_p = x_p] = \sum_{k=1}^p x_{k} \beta_k\]
+<h2>Interpretation of the coeficient</h2>
+
+<p>\[ E[Y | X_1 = x_1, \ldots, X_p = x_p] = \sum_{k=1}^p x_{k} \beta_k \]
 So that
-\[
-E[Y | X_1 = x_1 + 1, \ldots, X_p = x_p]  - E[Y | X_1 = x_1, \ldots, X_p = x_p]\]
-\[= (x_1 + 1) \beta_1 + \sum_{k=2}^p x_{k}+ \sum_{k=1}^p x_{k} \beta_k = \beta_1 \]
+\[ 
+E[Y | X_1 = x_1 + 1, \ldots, X_p = x_p]  - E[Y | X_1 = x_1, \ldots, X_p = x_p] \]
+\[ = (x_1 + 1) \beta_1 + \sum_{k=2}^p x_{k}+ \sum_{k=1}^p x_{k} \beta_k = \beta_1  \]
 So that the interpretation of a multivariate regression coefficient is the expected change in the response per unit change in the regressor, holding all of the other regressors fixed.</p>
 
 <p>In the next lecture, we&#39;ll do examples and go over context-specific
 interpretations.</p>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-18" style="background:;">
-  <hgroup>
-    <h2>Fitted values, residuals and residual variation</h2>
-  </hgroup>
-  <article>
-    <p>All of our SLR quantities can be extended to linear models</p>
+<h2>Fitted values, residuals and residual variation</h2>
+
+<p>All of our SLR quantities can be extended to linear models</p>
 
 <ul>
-<li>Model \(Y_i = \sum_{k=1}^p X_{ik} \beta_{k} + \epsilon_{i}\) where \(\epsilon_i \sim N(0, \sigma^2)\)</li>
-<li>Fitted responses \(\hat Y_i = \sum_{k=1}^p X_{ik} \hat \beta_{k}\)</li>
-<li>Residuals \(e_i = Y_i - \hat Y_i\)</li>
-<li>Variance estimate \(\hat \sigma^2 = \frac{1}{n-p} \sum_{i=1}^n e_i ^2\)</li>
-<li>To get predicted responses at new values, \(x_1, \ldots, x_p\), simply plug them into the linear model \(\sum_{k=1}^p x_{k} \hat \beta_{k}\)</li>
-<li>Coefficients have standard errors, \(\hat \sigma_{\hat \beta_k}\), and
-\(\frac{\hat \beta_k - \beta_k}{\hat \sigma_{\hat \beta_k}}\)
-follows a \(T\) distribution with \(n-p\) degrees of freedom.</li>
+<li>Model \( Y_i = \sum_{k=1}^p X_{ik} \beta_{k} + \epsilon_{i} \) where \( \epsilon_i \sim N(0, \sigma^2) \)</li>
+<li>Fitted responses \( \hat Y_i = \sum_{k=1}^p X_{ik} \hat \beta_{k} \)</li>
+<li>Residuals \( e_i = Y_i - \hat Y_i \)</li>
+<li>Variance estimate \( \hat \sigma^2 = \frac{1}{n-p} \sum_{i=1}^n e_i ^2 \)</li>
+<li>To get predicted responses at new values, \( x_1, \ldots, x_p \), simply plug them into the linear model \( \sum_{k=1}^p x_{k} \hat \beta_{k} \)</li>
+<li>Coefficients have standard errors, \( \hat \sigma_{\hat \beta_k} \), and
+\( \frac{\hat \beta_k - \beta_k}{\hat \sigma_{\hat \beta_k}} \)
+follows a \( T \) distribution with \( n-p \) degrees of freedom.</li>
 <li>Predicted responses have standard errors and we can calculate predicted and expected response intervals.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-19" style="background:;">
-  <hgroup>
-    <h2>Linear models</h2>
-  </hgroup>
-  <article>
-    <ul>
+<h2>Linear models</h2>
+
+<ul>
 <li>Linear models are the single most important applied statistical and machine learning techniqe, <em>by far</em>.</li>
 <li>Some amazing things that you can accomplish with linear models
 
@@ -501,40 +539,7 @@ follows a \(T\) distribution with \(n-p\) degrees of freedom.</li>
 </ul></li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-    <slide class="backdrop"></slide>
-  </slides>
-
-  <!--[if IE]>
-    <script 
-      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
-    </script>
-    <script>CFInstall.check({mode: 'overlay'});</script>
-  <![endif]-->
 </body>
-<!-- Grab CDN jQuery, fall back to local if offline -->
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
-<!-- Load Javascripts for Widgets -->
-<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [['$','$'], ['\\(','\\)']],
-      processEscapes: true
-    }
-  });
-</script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script> -->
-<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="../../libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
-</script>
-<!-- LOAD HIGHLIGHTER JS FILES -->
-<script src="../../libraries/highlighters/highlight.js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+
 </html>
+

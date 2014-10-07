@@ -1,105 +1,227 @@
 <!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
 <html>
 <head>
-  <title>Inference in regression</title>
-  <meta charset="utf-8">
-  <meta name="description" content="Inference in regression">
-  <meta name="author" content="Brian Caffo, Jeff Leek and Roger Peng">
-  <meta name="generator" content="slidify" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/css/default.css" media="all" >
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/phone.css" 
-    media="only screen and (max-device-width: 480px)" >
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/css/slidify.css" >
-  <link rel="stylesheet" href="../../libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
-  <script data-main="../../libraries/frameworks/io2012/js/slides" 
-    src="../../libraries/frameworks/io2012/js/require-1.0.8.min.js">
-  </script>
-  
-    <link rel="stylesheet" href = "../../assets/css/custom.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.BACKUP.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.BASE.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.LOCAL.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.orig">
-<link rel="stylesheet" href = "../../assets/css/custom.css.REMOTE.546.css">
-<link rel="stylesheet" href = "../../assets/css/ribbons.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Recall our model and fitted values</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 
 </head>
-<body style="opacity: 0">
-  <slides class="layout-widescreen">
-    
-    <!-- LOGO SLIDE -->
-    <!-- END LOGO SLIDE -->
-    
 
-    <!-- TITLE SLIDE -->
-    <!-- Should I move this to a Local Layout File? -->
-    <slide class="title-slide segue nobackground">
-      <aside class="gdbar">
-        <img src="../../assets/img/bloomberg_shield.png">
-      </aside>
-      <hgroup class="auto-fadein">
-        <h1>Inference in regression</h1>
-        <h2></h2>
-        <p>Brian Caffo, Jeff Leek and Roger Peng<br/>Johns Hopkins Bloomberg School of Public Health</p>
-      </hgroup>
-          </slide>
+<body>
+<h2>Recall our model and fitted values</h2>
 
-    <!-- SLIDES -->
-      <slide class="" id="slide-1" style="background:;">
-  <hgroup>
-    <h2>Recall our model and fitted values</h2>
-  </hgroup>
-  <article>
-    <ul>
+<ul>
 <li>Consider the model
-\[
+\[ 
 Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
-\]</li>
-<li>\(\epsilon \sim N(0, \sigma^2)\). </li>
+ \]</li>
+<li>\( \epsilon \sim N(0, \sigma^2) \). </li>
 <li>We assume that the true model is known.</li>
 <li>We assume that you&#39;ve seen confidence intervals and hypothesis tests before.</li>
-<li>\(\hat \beta_0 = \bar Y - \hat \beta_1 \bar X\)</li>
-<li>\(\hat \beta_1 = Cor(Y, X) \frac{Sd(Y)}{Sd(X)}\).</li>
+<li>\( \hat \beta_0 = \bar Y - \hat \beta_1 \bar X \)</li>
+<li>\( \hat \beta_1 = Cor(Y, X) \frac{Sd(Y)}{Sd(X)} \).</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-2" style="background:;">
-  <hgroup>
-    <h2>Review</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>Statistics like \(\frac{\hat \theta - \theta}{\hat \sigma_{\hat \theta}}\) often have the following properties.
+<h2>Review</h2>
+
+<ul>
+<li>Statistics like \( \frac{\hat \theta - \theta}{\hat \sigma_{\hat \theta}} \) often have the following properties.
 
 <ol>
 <li>Is normally distributed and has a finite sample Student&#39;s T distribution if the estimated variance is replaced with a sample estimate (under normality assumptions).</li>
-<li>Can be used to test \(H_0 : \theta = \theta_0\) versus \(H_a : \theta >, <, \neq \theta_0\).</li>
-<li>Can be used to create a confidence interval for \(\theta\) via \(\hat \theta \pm Q_{1-\alpha/2} \hat \sigma_{\hat \theta}\)
-where \(Q_{1-\alpha/2}\) is the relevant quantile from either a normal or T distribution.</li>
+<li>Can be used to test \( H_0 : \theta = \theta_0 \) versus \( H_a : \theta >, <, \neq \theta_0 \).</li>
+<li>Can be used to create a confidence interval for \( \theta \) via \( \hat \theta \pm Q_{1-\alpha/2} \hat \sigma_{\hat \theta} \)
+where \( Q_{1-\alpha/2} \) is the relevant quantile from either a normal or T distribution.</li>
 </ol></li>
 <li>In the case of regression with iid sampling assumptions and normal errors, our inferences will follow
 very similarily to what you saw in your inference class.</li>
 <li>We won&#39;t cover asymptotics for regression analysis, but suffice it to say that under assumptions 
-on the ways in which the \(X\) values are collected, the iid sampling model, and mean model, 
+on the ways in which the \( X \) values are collected, the iid sampling model, and mean model, 
 the normal results hold to create intervals and confidence intervals</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-3" style="background:;">
-  <hgroup>
-    <h2>Standard errors (conditioned on X)</h2>
-  </hgroup>
-  <article>
-    <p>\[
+<h2>Standard errors (conditioned on X)</h2>
+
+<p>\[ 
 \begin{align}
 Var(\hat \beta_1) & =
 Var\left(\frac{\sum_{i=1}^n (Y_i - \bar Y) (X_i - \bar X)}{\sum_{i=1}^n (X_i - \bar X)^2}\right) \\
@@ -107,40 +229,30 @@ Var\left(\frac{\sum_{i=1}^n (Y_i - \bar Y) (X_i - \bar X)}{\sum_{i=1}^n (X_i - \
 & = \frac{\sum_{i=1}^n \sigma^2(X_i - \bar X)^2}{\left(\sum_{i=1}^n (X_i - \bar X)^2 \right)^2} \\
 & = \frac{\sigma^2}{\sum_{i=1}^n (X_i - \bar X)^2} \\
 \end{align}
-\]</p>
+ \]</p>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-4" style="background:;">
-  <hgroup>
-    <h2>Results</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>\(\sigma_{\hat \beta_1}^2 = Var(\hat \beta_1) = \sigma^2 / \sum_{i=1}^n (X_i - \bar X)^2\)</li>
-<li>\(\sigma_{\hat \beta_0}^2 = Var(\hat \beta_0)  = \left(\frac{1}{n} + \frac{\bar X^2}{\sum_{i=1}^n (X_i - \bar X)^2 }\right)\sigma^2\)</li>
-<li>In practice, \(\sigma\) is replaced by its estimate.</li>
+<h2>Results</h2>
+
+<ul>
+<li>\( \sigma_{\hat \beta_1}^2 = Var(\hat \beta_1) = \sigma^2 / \sum_{i=1}^n (X_i - \bar X)^2 \)</li>
+<li>\( \sigma_{\hat \beta_0}^2 = Var(\hat \beta_0)  = \left(\frac{1}{n} + \frac{\bar X^2}{\sum_{i=1}^n (X_i - \bar X)^2 }\right)\sigma^2 \)</li>
+<li>In practice, \( \sigma \) is replaced by its estimate.</li>
 <li>It&#39;s probably not surprising that under iid Gaussian errors
-\[
+\[ 
 \frac{\hat \beta_j - \beta_j}{\hat \sigma_{\hat \beta_j}}
-\]
-follows a \(t\) distribution with \(n-2\) degrees of freedom and a normal distribution for large \(n\).</li>
+ \]
+follows a \( t \) distribution with \( n-2 \) degrees of freedom and a normal distribution for large \( n \).</li>
 <li>This can be used to create confidence intervals and perform
 hypothesis tests.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-5" style="background:;">
-  <hgroup>
-    <h2>Example diamond data set</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">library(UsingR); data(diamond)
+<h2>Example diamond data set</h2>
+
+<pre><code class="r">library(UsingR); data(diamond)
 y &lt;- diamond$price; x &lt;- diamond$carat; n &lt;- length(y)
 beta1 &lt;- cor(y, x) * sd(y) / sd(x)
 beta0 &lt;- mean(y) - beta1 * mean(x)
@@ -157,16 +269,11 @@ colnames(coefTable) &lt;- c(&quot;Estimate&quot;, &quot;Std. Error&quot;, &quot;
 rownames(coefTable) &lt;- c(&quot;(Intercept)&quot;, &quot;x&quot;)
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-6" style="background:;">
-  <hgroup>
-    <h2>Example continued</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">coefTable
+<h2>Example continued</h2>
+
+<pre><code class="r">coefTable
 </code></pre>
 
 <pre><code>            Estimate Std. Error t value   P(&gt;|t|)
@@ -183,16 +290,11 @@ summary(fit)$coefficients
 x             3721.0      81.79   45.50 6.751e-40
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-7" style="background:;">
-  <hgroup>
-    <h2>Getting a confidence interval</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">sumCoef &lt;- summary(fit)$coefficients
+<h2>Getting a confidence interval</h2>
+
+<pre><code class="r">sumCoef &lt;- summary(fit)$coefficients
 sumCoef[1,1] + c(-1, 1) * qt(.975, df = fit$df) * sumCoef[1, 2]
 </code></pre>
 
@@ -208,44 +310,34 @@ sumCoef[1,1] + c(-1, 1) * qt(.975, df = fit$df) * sumCoef[1, 2]
 <p>With 95% confidence, we estimate that a 0.1 carat increase in
 diamond size results in a 355.6 to 388.6 increase in price in (Singapore) dollars.</p>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-8" style="background:;">
-  <hgroup>
-    <h2>Prediction of outcomes</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>Consider predicting \(Y\) at a value of \(X\)
+<h2>Prediction of outcomes</h2>
+
+<ul>
+<li>Consider predicting \( Y \) at a value of \( X \)
 
 <ul>
 <li>Predicting the price of a diamond given the carat</li>
 <li>Predicting the height of a child given the height of the parents</li>
 </ul></li>
-<li>The obvious estimate for prediction at point \(x_0\) is 
-\[
+<li>The obvious estimate for prediction at point \( x_0 \) is 
+\[ 
 \hat \beta_0 + \hat \beta_1 x_0
-\]</li>
+ \]</li>
 <li>A standard error is needed to create a prediction interval.</li>
 <li>There&#39;s a distinction between intervals for the regression
-line at point \(x_0\) and the prediction of what a \(y\) would be
-at point \(x_0\). </li>
-<li>Line at \(x_0\) se, \(\hat \sigma\sqrt{\frac{1}{n} +  \frac{(x_0 - \bar X)^2}{\sum_{i=1}^n (X_i - \bar X)^2}}\)</li>
-<li>Prediction interval se at \(x_0\), \(\hat \sigma\sqrt{1 + \frac{1}{n} + \frac{(x_0 - \bar X)^2}{\sum_{i=1}^n (X_i - \bar X)^2}}\)</li>
+line at point \( x_0 \) and the prediction of what a \( y \) would be
+at point \( x_0 \). </li>
+<li>Line at \( x_0 \) se, \( \hat \sigma\sqrt{\frac{1}{n} +  \frac{(x_0 - \bar X)^2}{\sum_{i=1}^n (X_i - \bar X)^2}} \)</li>
+<li>Prediction interval se at \( x_0 \), \( \hat \sigma\sqrt{1 + \frac{1}{n} + \frac{(x_0 - \bar X)^2}{\sum_{i=1}^n (X_i - \bar X)^2}} \)</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-9" style="background:;">
-  <hgroup>
-    <h2>Plotting the prediction intervals</h2>
-  </hgroup>
-  <article>
-    <pre><code>plot(x, y, frame=FALSE,xlab=&quot;Carat&quot;,ylab=&quot;Dollars&quot;,pch=21,col=&quot;black&quot;, bg=&quot;lightblue&quot;, cex=2)
+<h2>Plotting the prediction intervals</h2>
+
+<pre><code>plot(x, y, frame=FALSE,xlab=&quot;Carat&quot;,ylab=&quot;Dollars&quot;,pch=21,col=&quot;black&quot;, bg=&quot;lightblue&quot;, cex=2)
 abline(fit, lwd = 2)
 xVals &lt;- seq(min(x), max(x), by = .01)
 yVals &lt;- beta0 + beta1 * xVals
@@ -257,27 +349,17 @@ lines(xVals, yVals + 2 * se2)
 lines(xVals, yVals - 2 * se2)
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-10" style="background:;">
-  <hgroup>
-    <h2>Plotting the prediction intervals</h2>
-  </hgroup>
-  <article>
-    <div class="rimage center"><img src="fig/fig.width==5.png" title="plot of chunk fig.width==5" alt="plot of chunk fig.width==5" class="plot" /></div>
+<h2>Plotting the prediction intervals</h2>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<div class="rimage center"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAH0CAMAAADohw7tAAAAWlBMVEX9/v0AAAAAADkAAGUAOY8AZo8AZrU5AAA5ADk5AGU5OTk5j9plAABlADlltf2POQCP2/2t2Oa1ZgC1/v3ajznatWXatbXa/rXa/v39tWX924/9/rX9/tr9/v0nc1h1AAAAHnRSTlP//////////////////////////////////////wDsGBxeAAAACXBIWXMAAA9hAAAPYQGoP6dpAAAZDElEQVR4nO2da2PjKJZAh+raZGYqm1TcntlyEv//v7nRGyRAIAukC+d86HZiWS+fIpfLBf3jDiCUfxx9AgBbQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAtiQV4QC/KCWJAXxIK8IBbkBbEgL4gFeUEsyAsHoh76NPLCYajH3EVeOArV8cAekBcO4Vvb95YH7EVeOAJ17919xF7khfwozd0H7EVeyE0T52ruIi+IoXVVl3ezvcgLWenTC8gL0hgzY8gLstCSusgLotAdpcMGgpiNpTlTZRGDbsgLOVgaaR+kiBoxRl7IgM1H2/BwXLED8kJyHEIuCnNi63SQFxLjFlJtjxhakBeSkk5d5IW0JFQXeSElnmZ3tt2monTkhVTERAybDoC8kIaUwW5PnLxfb11646+/tx0NasHj417qRsp7Va/di5v6tfWAUAMedeeJ3Uxz2L7eRmWvP/9sPyYUTmDE8Ojk4Sh5P19eh5c3AgdwkLyfNkLLC7sSE+w+eqy4mPfH7+7FxzMxL9jIE+z2xGUbPl+6bAPtLtjIFez2kOeFvQiMGPZSF3lhL3zqPlL36IFBCtiDA9RlkAL2IEbd/dwlVQYP4/PRr+6DJjNIAQ/iU1fpr3dWl5YXHmRzsJs7z8sgBZgcqS6DFPAAm/tp5HnhWDb30w7K87pQI7vsDs6PV11fP+2oPO/6IAXyVkKguotgd9fmbedBCuStgq39tJ3/Mu+cKkPeCtga7O4eVO48SIG8xbM12E3QH6LlhSjOo+7ugxTIWzaBwe4yxZDkbHYepEDekokJdkM/9wg7D1Igb7nEBLuhn3sM5IUg0vTT8pVEBoC8heL7YjcHuznXbQgAeYsksNmNGwrOu27D0F3zDBAjb4FERQyGyxt3GkpUy/v1tjaBAnmLI0Zd/fE+ydWNL8x58m+AvKURE+xqD1bLoG50zHtTr973kbcsYoJd/ZGWOdSlwwYeYtQ1HiYc2Fw/CvKCg1AFu06a0tT1PAr7uHredZC3GAL/8g/5BTWp636O+4H1vAEgbyFEZ3bVpK5L3kPreQNA3iLYMCihJnXt8h5czxsA8hbAarA7jVVpIk/q2tw9vp53HeQVz3qGdogQZgU4eqps8bm9z7IFecFgvZ+mBnWV+Y674aWeFzIQEOyqQd3JUqPPtnCXel7IQEg/TY3qDppOn7KtO5NyHRrkhZ6wQQljOE2tFpsnFQJ5oSNsUMIcCV5Z3yv16l/ICw0Rmd3AGobk6iIvNGwqHvPWMGRQF3khuAKn643pNQyZ6m+cIG/tBJaNj4mEfojCXcKQS13krZ1Yde99sszjbr5FmpG3ZkIn68yH03KWjnlA3orxJwumV/ORYNtgRMgu9wZ5q2VDxHBfEz7v94+8lbJR3TwzKwNB3iopQV3krZKt/bStu0wF8lZH6LqNZ1cXeesjsMcV0U87SF3krY0Uwe7jZ7UR5K2J+azJ2ZvGZrY3vJ/KD/LWw1gSZv2WxKmLvBWhPFMkZ82u8SnPHg/+upG3ErRqxqW9bnUPrtj1g7xVYC6FN5N3U7B7vLrIWwXmUnhze4WlGDSQt3i0SesWeacyXTH9tBHkLZ1JU4u8rmBXgrrIWzrGUngLeUWri7xlY2YO5u46IobQ2ofjQd5yWay8ZMi7Td1TfcHIWyyWkYjJ3QLURd5SsRcxjMPD9mBXlrrIWyiuCb6zBc1Fq4u8ReJdYN8RMazIecovNvbxrd0/XOcjiE95jbURtsJ+lLrn/F6j5L0OD2+9qV/2Lc55kVWhlLOI4a4Nt8lXN07er7dR2evPP9ZNznqZ1TCvwHGU4JSgbpy8ny/jU7NvjsDhvBdaBSsVOBvUPfU3SstbDv4KHGuwu6ruqb/QuJj3x+/uxcczMe/p8FbgWINd2erGZhs+X7psg6PdRd7jcFTgzKrHSlKXPG8hmKLNU2Vb1JXwVSJvASxENAYpbP20dXUlfJMMUsjHctO1Oe7FqssghXzsog0lDJaIoRR1SZVJJ6yaxgh2H9rjqdhnkEKN7HZiEMAGdQvop43Q8solsBCswGC3h0EKqQSWJJSrLoMUUolQt8Bgt4c8r0jCqmmKDXZ7kFcgYc1unLoSv7k4ea9KPbUDFa+ODSTeAmkQ7A7Eddie7veLejLyDiYyb4IkAutvK1A3NlX23eDe2ozDjVTZIQRWgpXdTxuJHqT4+FczPMFMiiMI7HSVVffogZZXDmFtaDXqEvOeD9cwe0TEEPgJ8d9WXLbhQrYhNY4H9kREDOZvPJ8Q/2WR5z0X9rVuAhMGFUUMLch7Kuxr3aCuHeQ9E9a1bsIihvrURd5zYVt5P6jZrVFd5D0XC3kjgl3jF75PPHqS5wF5z8RM3hTqlvQNIe+ZMOWN7qfVpS7yngsV4W716iLvyZjSvEGFj9q81/rURd6z0T9LQlkX5Nc26/47LiRdo7rIezoaG5X9YRLTNlOzG+h6md8L8p6N1fUv9Iihc9dWDLH4QIEg78mI6aepvtn1ylusurq8X29PzRw156z2IMq9UXmISzGoUV2nvQWrq8t7+evvj+enRuEHKPlWpSe2ZFf5H1pVuLqavE19+U293q/O5UtDKPtmpSW6ZFe5H/sTtkPpjPJ+vvxql3NC3mOIHk8bYl6nvOV/F4a835GDcwm9MMq/YYnYoK6jgtL4QNloMe/P/3t5ah1+gAruWAoCgl1zDdnhfy55a1DXzDaov/5+sL+GvFsICXbbxILR7HavrO7WoS553uMJCnbVez8kMa9isM3XrOZL0LINrhnBMVRz3/YiYqLEMBQ8f382IFdLs3ufddgep54btwsxKYagYrOa1J3leR+nplv3ONa7peaxrVGA4y/ZqUpdPeb9+Ofvx3dX1817DLtpWlZhpu77ShFDbeoaYUN/1xikyILDtKlAV5ufphfgeCpwEp3peSHbcAiuRnIc8VVjR+0eVIBTX7N7R95jcN2mqd3tJg9Pza+3/qZOdXV5h7iBsCE1btP04Fbvt9VdPOZEHx7+c316tNtW6V2MwWfaFNy6qhis7iY5TwEYed5myegr9bwp8TeSY3CrRQz9x4Z4InKPRWPI2yzZ3y3bv5V6b2QQ60MMo7rGSPBQ2bCcmVmxurNBis///Y28CVkfTxtbXWM0zVn6WLW6eszbVKFfflHPm4yQusdJXT1CcBSdV66ukSr77rF9vjyWbEBeJxFTKxdFDFZ5q1eXPG8mIuan9QmHFXlR9468eQgvHnsfVswx4oOFvNznBuRNT1zEMNbu2uVVATushU7esSqHEbbdiVwCx1rEYIywoe4ALW9aIpfAcQ0EBy99WhXIm5SweQ/TcJoeH5gZXecIW8Ugb0JWm91+q3Ek2Gh4zQ8v5qoBMW86YiOGeztJeHS3xiVwIqHlTUTkIyX6RniY62NZX5pmdwHyJiFsUGJeO3bXU2XzqGH/kxSPJu/H8/dN++Et522f+O4LLbjFLUGDEgt173fX+k2oa2WS96aaue9X5Vl7ZHyz29YCN/keEzEst7ZWnXNX7WglkV0V+sVdVaYt7eCqPeM2R0QM1q2Xc4Rpdl0sVszxrM/7+TK2yjfHVtXf54jlmxxbz3JiqOuGlndXVq/fDHbX91f7DfUSF/MO3bmPZ2JeC2ELPjojhvj9VU5ctmEYzHC2zjXf7fCIIWjrum9mEOR5d8KzGEPf1saqW++9DAV5d8FjmlZSQ7C7L7OF9lZmXzJIYWV1HZFuXg/B7s4M8l66jtrVNfpw795lkGKJ17Tx6cAR6lZ5F7fQy3ub8gjubAOpMhveSx7XbyLYTUAnr/YQoIt7uSf3IMVUULn/GZ6blStWk7qBM3jqu4XbGep5pzbVPcJGyzsnIDumrSOCujsTIy+DFCYhMtqXwNm+Q9CIkpdBCo2gdlRp6nofhRK2QzCIk3eVau5/WAigq7viLurGg7ybCIteB3X7pc4f2yEsiJuA2SR6mxIIZwVEHd9BWPTaDwqP60U/tEOwEDU83LTK7br/zme91vAlhI0yaIMSi5kR8TsEGzHytnneLg98qzZVFhHs6q89tQ/l37NUxMrb53qrnUkRre5iasRia9hKVNhw+Rb3WnPLGxPsjhMtlxMqI/YHHqLk/Xz5+adtem+uHlvRX0Z4sKtt7XsIVdF3KwOR9by37m+gs/6h4K8jLtjVlxFx2Euz+ygUo4exTV33c3xQdweQN4ht6t5dz/FB3V1A3gCi+mnGxnZ5UXcfkHeV7era5UXdvUDeFcLVbd2dv7eQF3X3A3m9xA0FL7fmOT4pQV4PG1MMxvu6vKi7L8jrJHDWjk/d+53n+CQEeR3so+79znN80oG8ViLUVWtb1zmtOgfIa2FPdbut9zgrmIO8C0JaSU92bNsOYQPIOyNI3ZUUQ/QOYRPIaxCobkA/LWKHsBHk1dhdXeH34+wg74hlfGyZJ4jrp0m+HQJA3h6LaNanSqHueUDeDtsknXkpo95PW9+h2FshB+RtsJk2n8BDP+10IO96Rc27op92SpDXsSyIWYlr9NPWxntpdjNRvbzK1jG7z1peI9j1LcRwR92MVC6vUnfHygpKU3d8Gop7c32HkImq5e2EtMyQ1H6tPQ3Ft/nwqTwnDi0Vy2usxuSQd66uZyGGO81ubqqV17KkzcLe8WkoAZujbn7qknfKE4wn6rZxVFeFbI66+alK3jFPELamTWdu0OaoewQ1yTv1wSy/NG3so1y1SOlaN0fdY6hI3nEmpNnCumRcXwJHaVvDAdQj7+CupWNm2ji1unfLBS03z3DuYKUyeZVleMwcdTDVXS02o9k9kKrkVaZ42jvD71bVtWwOR1GRvGrxF197a0rmrk+tNDaH46hI3vchbbuQt9+gjwMo2ZVCLfK2zo59NtucH9QVRx3y9vW4Y9BgmWvZbcYSOJKoQd6hUXWFvGvZMccO4WjKl9dWUmOpqGEJHHkUL+9qSQ3BrlgKlzegpKbbjKmVAila3sCSGtYREUrB8npKaixVDKgrj3LlXWQUdHeXQ8Hr+zvRtUFLnLxfb90Y1V9/OzY4zRdsWzXPkJd+mnyi5L2q1+7FTf2yb3GSr9heDaZ0d7vN6KdJJkber7dR2evPP9ZNTvElO6vBzOFhgl3pxMj7+fI6vLw5AocTfMsu06bCHKWt3kSwK5jSWl5PIeMYMwwWezdf3yEcTVzM++N39+Lj+Zwxr3f5uyFmeJ+tI+Lf434nB3sTl234fOn+6jra3aO/a+/RldHs3gl25VNQnnfFNKVHDEEPsUbdk1OMvKumqUndd0U/rQQKGaQIakcHdUOeYo26AihikCIwBEDdwiggVRYavY7qrgcYu5wXpGafQYox+X/A1x6h7j3oHFFXCtJb3sAQgEGJEpE9SBE4yoC6ZSJ5kCKmnxa0OerKQnCeNybYDdkcdaUhVt6IYDdoc9SVxxZ5XfWQ93zy7t9P2+OsIC8i5SXFAA1xed4pn3tgMTrqQkdUy/vx3Dp7bMsb5OI0GoG65RIZNlyaooYj5Q3reI3jfQS7JRMb8zaN73HyBuYMwkeraXYlE99hu6h/HySvxTRT0bm6a/airmw2ZBs+X46R17Jv49k+urrdZDW/vKgrHTGDFI51RIaZEcP7g7tqmGgZsz+QhRB5raqpcR2Gd03de/ujvihZzhOFjIiQ167g5KjSIoZhsppXXprdIpAgr2Ong6RtS6vGQQnnEujaB1OcJWTn/PK6//IrcxWRsfn1y4u6xXB2eT2qaQ8T1tT1trxHTVWCJJxbXj2Fu9Buepjw+NZK2NBHydhbCGeWV5PV8rB2LebtkmVjtszpru2Z7yCXE8ur7UtP6Gq/HCOGxketlbbLqychdjxNOIzTyqtMd3vp3vU4YlJ3lhNTVndXchAgjpPKO3NRX5B/fF9N6s7yuVP+V/vVagYNpHFKeec9M/NRKEYVg9lh67cfUmejpCtJCJDJGeWd72T2ECptKLj/lVnDsIgPAscuQBrnk3eZhzW10wpw3ofqMWdwq3XkkLc4ziavvXhs7u4wTWJMQrjlteUgcLcMziWvqwJnUvF9mKDWbW7trlnddWbQQCxnktc1cGs+x2dcR8Q122fu+vIN3C2D88jrqRvvlet8HF3t8g7LYgXddavWuFsIZ5HXVy7TD0eY7q5V7PSuz/dEYU5BnERe7+faflmwunetZAdPi+YU8q5O8jUe5BNQkjt05DadDUjhBPKuqajG5/gofZDCu0Pigxo4XN51dcdHXveRw4M7hGI4WN4AdYcKnGXidssOoSAOlTfQRL0Cxx/Hom5VHCnvBnX9nTDUrYvj5A1bR0xpEcNKBoFmtzaOkjdwCbyuAGdsdj3uom59HCNvjLr3cdavR17UrZEj5F3tpw2bTeNp/pIa1K2T/PLGpBjGnfpKalC3VnLLu0Hdqfzc7m7UCUJB5JU3dIhhru72PULB5JQXdWFX8skbo25I3SPqVk8ueePVXQ1mUbd28si7Xgo2bEfEAMFkkTe0ihF1IYbD63lRF7ZyuLzxwS7qQsdJitFjgt3ok4JCSS+vZzrZFnVxFwaSy+upSkBdeIjU8rrrweinwYPEyfv11gUBzidnz/VyLm4Xry7BLsyIkveqXrsXN/XLvsVMMNeyovFDwTS7sCBG3q+3Udnrzz/WTTzy6s9CGf4fPhSMurAgRt7Pl9fh5c0ROATIS4oBdiJ3yzt6SLALjxIX8/743b34eI6Pebs1zYc3ItTFXbATl234fOmyDY52d6XDZqhLPw0eJXGed/4EtfZ3qAu7kGuQwqIuKQZ4jMSDFPf7bGFS+mmwG2kHKdpfGTkx+mmwG2lTZbM3iRhgT/YZpFAj7k8zKAE7s3PL6yRCXYJdCGPnQQoXWqNMxAA7sfMghR1dXSIG2Iud87w2VHiz61VXQXk8ZFYGeffikDaZg574oHHyXr//rbQZh6tzmCIdAu8uB0160LgO27eyH89Pd+TloGc4aFyqrGl1P1++u2vIy0GPP+iGQYrGXuTloMcfNL7lbf7/hLwc9PiDRse8DR/P7rqydAi8uxw06UHjsg1DNdnXG/Jy0MMPSp6Xg4o9qCB5AUyQF8SCvCAW5AWxIC+IBXlBLMgLYkFeEAvygliQF8SCvCAW5AWxIC+I5dTy3pRST9rPH/9qCjG7xSOeXB/a96DX4af5ueQ4aNYrvSjVrSmT80qHg2670jPLe1Ov31c1XdHnS1tFfBvW7clw0Kv69f2bp+W55Dloxiu9fN/b5jdZr3Q66KYrPbG8X2/NNU6XdevXBU46Bck8aHebvw84P5csB815pR/Pr92vcl7peNCNV3piebsF0cZl0b5fdJd4Sfc3bX7Q9u42S7TNziXPQXNeaUvjUc4rHQ+68UpPLW8303660Fber7d/f4dHae6t7aDtHzfbr5MfNPuVNv9gsl9pc9CNV3piedtgyAi/WnnbX3R/frIctA9BF79Of9DMV3pr9cl8pd1BN16pPHn7NxMFZcuDjv21nPLepp53vittV+TI/s+0XcSmezP2Sk8sryNs6LgNj8dIfdCr+mU9lwwH7ch2pfc+us8dII2rPkdf6anlnbTpyCKvedBLp9HyXDIctCPXlfbHynul/UFnL0I5sbzLpE0rb98ZT5RFmh10eP5RzgTSeNCcVzqmOLKnyqbmPvpKTyzvMl3eZxuejMdjpDzolNPJmLofD5rzSttjtX/OM17peNCNV3pmecehxOHvSf9P8zKsEpz8oNdu+e6mocgzaDo7aL4r7Y71S/911oNuutJTywvgA3lBLMgLYkFeEAvygliQF8SCvCAW5AWxIC+IBXlBLMgLYkFeEAvygliQF8SCvCAW5AWxIC+IBXlBLMgLYkFeEAvygliQF8SCvCAW5AWxIC+IBXlBLMgLYkHexLQPaRqWT7ZyTbWSXvEgb1raZaK/3jwrhqZax7kCkDcp/XKl09L1S5B3M8iblEu/XvJ/G3cvfQBx+Z+3ZgHT7seP5/7xchAN8qbEaHEv36+7h461S9IOP9LybgZ5U6KvMD4tXX8xnk6AvJtB3pTMlsf/emtDhEvfHHc/Iu9mkDclX2962NCoeh3lHX5E3s0gb1KGDttVvd7aSHeUd/wReTeDvEnpU2VNC9w+v+nrbZR3+BF5N4O8aZkGKT6en5ofB3nHH5F3M8ibmCaP2w0PNw9x+vmfJsFr/nglz7sR5AWxIC+IBXlBLMgLYkFeEAvygliQF8SCvCAW5AWxIC+IBXlBLMgLYkFeEAvygliQF8SCvCAW5AWxIC+IBXlBLMgLYkFeEAvygliQF8SCvCCW/wdxf55LHJSmKwAAAABJRU5ErkJggg==" title="plot of chunk fig.width==5" alt="plot of chunk fig.width==5" class="plot" /></div>
 
-      <slide class="" id="slide-11" style="background:;">
-  <hgroup>
-    <h2>Discussion</h2>
-  </hgroup>
-  <article>
-    <ul>
+<hr/>
+
+<h2>Discussion</h2>
+
+<ul>
 <li>Both intervals have varying widths.
 
 <ul>
@@ -287,26 +369,21 @@ lines(xVals, yVals - 2 * se2)
 interval is very narrow.
 
 <ul>
-<li>If we knew \(\beta_0\) and \(\beta_1\) this interval would have zero width.</li>
+<li>If we knew \( \beta_0 \) and \( \beta_1 \) this interval would have zero width.</li>
 </ul></li>
 <li>The prediction interval must incorporate the variabilibity
 in the data around the line.
 
 <ul>
-<li>Even if we knew \(\beta_0\) and \(\beta_1\) this interval would still have width.</li>
+<li>Even if we knew \( \beta_0 \) and \( \beta_1 \) this interval would still have width.</li>
 </ul></li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-12" style="background:;">
-  <hgroup>
-    <h2>In R</h2>
-  </hgroup>
-  <article>
-    <pre><code>newdata &lt;- data.frame(x = xVals)
+<h2>In R</h2>
+
+<pre><code>newdata &lt;- data.frame(x = xVals)
 p1 &lt;- predict(fit, newdata, interval = (&quot;confidence&quot;))
 p2 &lt;- predict(fit, newdata, interval = (&quot;prediction&quot;))
 plot(x, y, frame=FALSE,xlab=&quot;Carat&quot;,ylab=&quot;Dollars&quot;,pch=21,col=&quot;black&quot;, bg=&quot;lightblue&quot;, cex=2)
@@ -315,55 +392,15 @@ lines(xVals, p1[,2]); lines(xVals, p1[,3])
 lines(xVals, p2[,2]); lines(xVals, p2[,3])
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-13" style="background:;">
-  <hgroup>
-    
-  </hgroup>
-  <article>
-    <hr>
+<hr/>
 
 <h2>In R</h2>
 
-<div class="rimage center"><img src="fig/unnamed-chunk-4.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div>
+<div class="rimage center"><img src="data:image/png;base64,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" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-    <slide class="backdrop"></slide>
-  </slides>
-
-  <!--[if IE]>
-    <script 
-      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
-    </script>
-    <script>CFInstall.check({mode: 'overlay'});</script>
-  <![endif]-->
 </body>
-<!-- Grab CDN jQuery, fall back to local if offline -->
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
-<!-- Load Javascripts for Widgets -->
-<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [['$','$'], ['\\(','\\)']],
-      processEscapes: true
-    }
-  });
-</script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script> -->
-<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="../../libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
-</script>
-<!-- LOAD HIGHLIGHTER JS FILES -->
-<script src="../../libraries/highlighters/highlight.js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+
 </html>
+

@@ -1,208 +1,328 @@
 <!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
 <html>
 <head>
-  <title>Statistical linear regression models</title>
-  <meta charset="utf-8">
-  <meta name="description" content="Statistical linear regression models">
-  <meta name="author" content="Brian Caffo, Jeff Leek, Roger Peng">
-  <meta name="generator" content="slidify" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/css/default.css" media="all" >
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/phone.css" 
-    media="only screen and (max-device-width: 480px)" >
-  <link rel="stylesheet" href="../../libraries/frameworks/io2012/css/slidify.css" >
-  <link rel="stylesheet" href="../../libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
-  <script data-main="../../libraries/frameworks/io2012/js/slides" 
-    src="../../libraries/frameworks/io2012/js/require-1.0.8.min.js">
-  </script>
-  
-    <link rel="stylesheet" href = "../../assets/css/custom.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.BACKUP.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.BASE.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.LOCAL.546.css">
-<link rel="stylesheet" href = "../../assets/css/custom.css.orig">
-<link rel="stylesheet" href = "../../assets/css/custom.css.REMOTE.546.css">
-<link rel="stylesheet" href = "../../assets/css/ribbons.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Basic regression model with additive Gaussian errors.</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 
 </head>
-<body style="opacity: 0">
-  <slides class="layout-widescreen">
-    
-    <!-- LOGO SLIDE -->
-    <!-- END LOGO SLIDE -->
-    
 
-    <!-- TITLE SLIDE -->
-    <!-- Should I move this to a Local Layout File? -->
-    <slide class="title-slide segue nobackground">
-      <aside class="gdbar">
-        <img src="../../assets/img/bloomberg_shield.png">
-      </aside>
-      <hgroup class="auto-fadein">
-        <h1>Statistical linear regression models</h1>
-        <h2></h2>
-        <p>Brian Caffo, Jeff Leek, Roger Peng<br/>Johns Hopkins Bloomberg School of Public Health</p>
-      </hgroup>
-          </slide>
+<body>
+<hr/>
 
-    <!-- SLIDES -->
-      <slide class="" id="slide-1" style="background:;">
-  <hgroup>
-    <h2>Basic regression model with additive Gaussian errors.</h2>
-  </hgroup>
-  <article>
-    <ul>
+<p>title       : Statistical linear regression models
+subtitle    : 
+author      : Brian Caffo, Jeff Leek, Roger Peng
+job         : Johns Hopkins Bloomberg School of Public Health
+logo        : bloomberg_shield.png
+framework   : io2012        # {io2012, html5slides, shower, dzslides, &hellip;}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+url:
+  lib: ../../libraries
+  assets: ../../assets
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}</p>
+
+<hr/>
+
+<h2>Basic regression model with additive Gaussian errors.</h2>
+
+<ul>
 <li>Least squares is an estimation tool, how do we do inference?</li>
 <li>Consider developing a probabilistic model for linear regression
-\[
+\[ 
 Y_i = \beta_0 + \beta_1 X_i + \epsilon_{i}
-\]</li>
-<li>Here the \(\epsilon_{i}\) are assumed iid \(N(0, \sigma^2)\). </li>
-<li>Note, \(E[Y_i ~|~ X_i = x_i] = \mu_i = \beta_0 + \beta_1 x_i\)</li>
-<li>Note, \(Var(Y_i ~|~ X_i = x_i) = \sigma^2\).</li>
-<li>Likelihood equivalent model specification is that the \(Y_i\) are independent \(N(\mu_i, \sigma^2)\).</li>
+ \]</li>
+<li>Here the \( \epsilon_{i} \) are assumed iid \( N(0, \sigma^2) \). </li>
+<li>Note, \( E[Y_i ~|~ X_i = x_i] = \mu_i = \beta_0 + \beta_1 x_i \)</li>
+<li>Note, \( Var(Y_i ~|~ X_i = x_i) = \sigma^2 \).</li>
+<li>Likelihood equivalent model specification is that the \( Y_i \) are independent \( N(\mu_i, \sigma^2) \).</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-2" style="background:;">
-  <hgroup>
-    <h2>Likelihood</h2>
-  </hgroup>
-  <article>
-    <p>\[
+<h2>Likelihood</h2>
+
+<p>\[ 
 {\cal L}(\beta, \sigma)
 = \prod_{i=1}^n \left\{(2 \pi \sigma^2)^{-1/2}\exp\left(-\frac{1}{2\sigma^2}(y_i - \mu_i)^2 \right) \right\}
-\]
+ \]
 so that the twice the negative log (base e) likelihood is
-\[
+\[ 
 -2 \log\{ {\cal L}(\beta, \sigma) \}
 = \frac{1}{\sigma^2} \sum_{i=1}^n (y_i - \mu_i)^2 + n\log(\sigma^2)
-\]
+ \]
 Discussion</p>
 
 <ul>
 <li>Maximizing the likelihood is the same as minimizing -2 log likelihood</li>
-<li>The least squares estimate for \(\mu_i = \beta_0 + \beta_1 x_i\) is exactly the maximimum likelihood estimate (regardless of \(\sigma\))</li>
+<li>The least squares estimate for \( \mu_i = \beta_0 + \beta_1 x_i \) is exactly the maximimum likelihood estimate (regardless of \( \sigma \))</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-3" style="background:;">
-  <hgroup>
-    <h2>Recap</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>Model \(Y_i =  \mu_i + \epsilon_i = \beta_0 + \beta_1 X_i + \epsilon_i\) where \(\epsilon_i\) are iid \(N(0, \sigma^2)\)</li>
-<li>ML estimates of \(\beta_0\) and \(\beta_1\) are the least squares estimates
-\[\hat \beta_1 = Cor(Y, X) \frac{Sd(Y)}{Sd(X)} ~~~ \hat \beta_0 = \bar Y - \hat \beta_1 \bar X\]</li>
-<li>\(E[Y ~|~ X = x] = \beta_0 + \beta_1 x\)</li>
-<li>\(Var(Y ~|~ X = x) = \sigma^2\)</li>
+<h2>Recap</h2>
+
+<ul>
+<li>Model \( Y_i =  \mu_i + \epsilon_i = \beta_0 + \beta_1 X_i + \epsilon_i \) where \( \epsilon_i \) are iid \( N(0, \sigma^2) \)</li>
+<li>ML estimates of \( \beta_0 \) and \( \beta_1 \) are the least squares estimates
+\[ \hat \beta_1 = Cor(Y, X) \frac{Sd(Y)}{Sd(X)} ~~~ \hat \beta_0 = \bar Y - \hat \beta_1 \bar X \]</li>
+<li>\( E[Y ~|~ X = x] = \beta_0 + \beta_1 x \)</li>
+<li>\( Var(Y ~|~ X = x) = \sigma^2 \)</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-4" style="background:;">
-  <hgroup>
-    <h2>Interpretting regression coefficients, the itc</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>\(\beta_0\) is the expected value of the response when the predictor is 0
-\[
+<h2>Interpretting regression coefficients, the itc</h2>
+
+<ul>
+<li>\( \beta_0 \) is the expected value of the response when the predictor is 0
+\[ 
 E[Y | X = 0] =  \beta_0 + \beta_1 \times 0 = \beta_0
-\]</li>
-<li>Note, this isn&#39;t always of interest, for example when \(X=0\) is impossible or far outside of the range of data. (X is blood pressure, or height etc.) </li>
+ \]</li>
+<li>Note, this isn&#39;t always of interest, for example when \( X=0 \) is impossible or far outside of the range of data. (X is blood pressure, or height etc.) </li>
 <li>Consider that 
-\[
+\[ 
 Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
 = \beta_0 + a \beta_1 + \beta_1 (X_i - a) + \epsilon_i
 = \tilde \beta_0 + \beta_1 (X_i - a) + \epsilon_i
-\]
-So, shifting you \(X\) values by value \(a\) changes the intercept, but not the slope. </li>
-<li>Often \(a\) is set to \(\bar X\) so that the intercept is interpretted as the expected response at the average \(X\) value.</li>
+ \]
+So, shifting you \( X \) values by value \( a \) changes the intercept, but not the slope. </li>
+<li>Often \( a \) is set to \( \bar X \) so that the intercept is interpretted as the expected response at the average \( X \) value.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-5" style="background:;">
-  <hgroup>
-    <h2>Interpretting regression coefficients, the slope</h2>
-  </hgroup>
-  <article>
-    <ul>
-<li>\(\beta_1\) is the expected change in response for a 1 unit change in the predictor
-\[
+<h2>Interpretting regression coefficients, the slope</h2>
+
+<ul>
+<li>\( \beta_1 \) is the expected change in response for a 1 unit change in the predictor
+\[ 
 E[Y ~|~ X = x+1] - E[Y ~|~ X = x] =
 \beta_0 + \beta_1 (x + 1) - (\beta_0 + \beta_1 x ) = \beta_1
-\]</li>
-<li>Consider the impact of changing the units of \(X\). 
-\[
+ \]</li>
+<li>Consider the impact of changing the units of \( X \). 
+\[ 
 Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
 = \beta_0 + \frac{\beta_1}{a} (X_i a) + \epsilon_i
 = \beta_0 + \tilde \beta_1 (X_i a) + \epsilon_i
-\]</li>
-<li>Therefore, multiplication of \(X\) by a factor \(a\) results in dividing the coefficient by a factor of \(a\). </li>
-<li>Example: \(X\) is height in \(m\) and \(Y\) is weight in \(kg\). Then \(\beta_1\) is \(kg/m\). Converting \(X\) to \(cm\) implies multiplying \(X\) by \(100 cm/m\). To get \(\beta_1\) in the right units, we have to divide by \(100 cm /m\) to get it to have the right units. 
-\[
+ \]</li>
+<li>Therefore, multiplication of \( X \) by a factor \( a \) results in dividing the coefficient by a factor of \( a \). </li>
+<li>Example: \( X \) is height in \( m \) and \( Y \) is weight in \( kg \). Then \( \beta_1 \) is \( kg/m \). Converting \( X \) to \( cm \) implies multiplying \( X \) by \( 100 cm/m \). To get \( \beta_1 \) in the right units, we have to divide by \( 100 cm /m \) to get it to have the right units. 
+\[ 
 X m \times \frac{100cm}{m} = (100 X) cm
 ~~\mbox{and}~~
 \beta_1 \frac{kg}{m} \times\frac{1 m}{100cm} = 
 \left(\frac{\beta_1}{100}\right)\frac{kg}{cm}
-\]</li>
+ \]</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-6" style="background:;">
-  <hgroup>
-    <h2>Using regression coeficients for prediction</h2>
-  </hgroup>
-  <article>
-    <ul>
+<h2>Using regression coeficients for prediction</h2>
+
+<ul>
 <li>If we would like to guess the outcome at a particular
-value of the predictor, say \(X\), the regression model guesses
-\[
-\hat \beta_0 + \hat \beta_1 X
-\]</li>
+value of the predictor, say \( X \), the regression model guesses
+\[ 
+  \hat \beta_0 + \hat \beta_1 X
+   \]</li>
 <li>Note that at the observed value of $X$s, we obtain the
 predictions
-\[
-\hat \mu_i = \hat Y_i = \hat \beta_0 + \hat \beta_1 X_i
-\]</li>
+\[ 
+  \hat \mu_i = \hat Y_i = \hat \beta_0 + \hat \beta_1 X_i
+   \]</li>
 <li>Remember that least squares minimizes 
-\[
+\[ 
 \sum_{i=1}^n (Y_i - \mu_i)
-\]
-for \(\mu_i\) expressed as points on a line</li>
+ \]
+for \( \mu_i \) expressed as points on a line</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-7" style="background:;">
-  <hgroup>
-    <h2>Example</h2>
-  </hgroup>
-  <article>
-    <h3><code>diamond</code> data set from <code>UsingR</code></h3>
+<h2>Example</h2>
+
+<h3><code>diamond</code> data set from <code>UsingR</code></h3>
 
 <p>Data is diamond prices (Signapore dollars) and diamond weight
-in carats (standard measure of diamond mass, 0.2 \(g\)). To get the data use <code>library(UsingR); data(diamond)</code></p>
+in carats (standard measure of diamond mass, 0.2 \( g \)). To get the data use <code>library(UsingR); data(diamond)</code></p>
 
 <p>Plotting the fitted regression line and data</p>
 
@@ -215,27 +335,17 @@ plot(diamond$carat, diamond$price,
 abline(lm(price ~ carat, data = diamond), lwd = 2)
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-8" style="background:;">
-  <hgroup>
-    <h2>The plot</h2>
-  </hgroup>
-  <article>
-    <div class="rimage center"><img src="fig/unnamed-chunk-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" class="plot" /></div>
+<h2>The plot</h2>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<div class="rimage center"><img src="data:image/png;base64,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" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" class="plot" /></div>
 
-      <slide class="" id="slide-9" style="background:;">
-  <hgroup>
-    <h2>Fitting the linear regression model</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">fit &lt;- lm(price ~ carat, data = diamond)
+<hr/>
+
+<h2>Fitting the linear regression model</h2>
+
+<pre><code class="r">fit &lt;- lm(price ~ carat, data = diamond)
 coef(fit)
 </code></pre>
 
@@ -249,16 +359,11 @@ coef(fit)
 of a 0 carat diamond.</li>
 </ul>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-10" style="background:;">
-  <hgroup>
-    <h2>Getting a more interpretable intercept</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">fit2 &lt;- lm(price ~ I(carat - mean(carat)), data = diamond)
+<h2>Getting a more interpretable intercept</h2>
+
+<pre><code class="r">fit2 &lt;- lm(price ~ I(carat - mean(carat)), data = diamond)
 coef(fit2)
 </code></pre>
 
@@ -269,16 +374,11 @@ coef(fit2)
 <p>Thus $500.1 is the expected price for 
 the average sized diamond of the data (0.2042 carats).</p>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-11" style="background:;">
-  <hgroup>
-    <h2>Changing scale</h2>
-  </hgroup>
-  <article>
-    <ul>
+<h2>Changing scale</h2>
+
+<ul>
 <li>A one carat increase in a diamond is pretty big, what about
 changing units to 1/10th of a carat? </li>
 <li>We can just do this by just dividing the coeficient by 10.
@@ -297,16 +397,11 @@ coef(fit3)
        -259.6         372.1 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-12" style="background:;">
-  <hgroup>
-    <h2>Predicting the price of a diamond</h2>
-  </hgroup>
-  <article>
-    <pre><code class="r">newx &lt;- c(0.16, 0.27, 0.34)
+<h2>Predicting the price of a diamond</h2>
+
+<pre><code class="r">newx &lt;- c(0.16, 0.27, 0.34)
 coef(fit)[1] + coef(fit)[2] * newx
 </code></pre>
 
@@ -320,54 +415,14 @@ coef(fit)[1] + coef(fit)[2] * newx
  335.7  745.1 1005.5 
 </code></pre>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+<hr/>
 
-      <slide class="" id="slide-13" style="background:;">
-  <hgroup>
-    
-  </hgroup>
-  <article>
-    <p>Predicted values at the observed Xs (red)
+<p>Predicted values at the observed Xs (red)
 and at the new Xs (lines)</p>
 
-<div class="rimage center"><img src="fig/unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div>
+<div class="rimage center"><img src="data:image/png;base64,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" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-    <slide class="backdrop"></slide>
-  </slides>
-
-  <!--[if IE]>
-    <script 
-      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
-    </script>
-    <script>CFInstall.check({mode: 'overlay'});</script>
-  <![endif]-->
 </body>
-<!-- Grab CDN jQuery, fall back to local if offline -->
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
-<!-- Load Javascripts for Widgets -->
-<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [['$','$'], ['\\(','\\)']],
-      processEscapes: true
-    }
-  });
-</script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script> -->
-<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="../../libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
-</script>
-<!-- LOAD HIGHLIGHTER JS FILES -->
-<script src="../../libraries/highlighters/highlight.js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+
 </html>
+
